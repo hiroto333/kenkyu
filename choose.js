@@ -108,9 +108,9 @@ function createItemList() {
                     </div>
                 </div>
                 <div class="quantity-selector">
-                    <button onclick="adjustQuantity('${item.name}', -1)">-</button>
+                    <button class="decrease-button" onclick="adjustQuantity('${item.name}', -1)">-</button>
                     <span class="quantity">0</span>
-                    <button onclick="adjustQuantity('${item.name}', 1)">+</button>
+                    <button class="increase-button" onclick="adjustQuantity('${item.name}', 1)">+</button>
                 </div>
             `;
             categoryDiv.appendChild(itemDiv);
