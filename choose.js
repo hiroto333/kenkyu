@@ -186,4 +186,48 @@ function resetSelection() {
     updateDisplay();     // 画面を更新
 }
 
+
+// 作成完了ボタン機能
+function completeSelection() {
+    const feedback = document.getElementById('feedback');
+    const itemList = document.querySelector('.container');
+    const advice = document.getElementById('advice');
+
+    // フィードバックの例
+    let adviceText = "<p>非常持ち出し袋の内容:</p><ul>";
+    let issues = false;
+
+    // 簡単なチェック例 (水が少ない場合)
+    if (!selectedItems["飲料水(500ml)"] || selectedItems["飲料水(500ml)"] < 3) {
+        adviceText += "<li>飲料水が不足しています。1日最低3本の500mlの水が必要です。</li>";
+        issues = true;
+    }
+
+    if (!selectedItems["非常食"] || selectedItems["非常食"] < 3) {
+        adviceText += "<li>非常食が足りません。最低3食分は用意しましょう。</li>";
+        issues = true;
+    }
+
+    if (!issues) {
+        adviceText += "<li>全て問題なく準備ができています。</li>";
+    }
+
+    adviceText += "</ul>";
+    advice.innerHTML = adviceText;
+
+    // メイン画面を非表示にし、フィードバック画面を表示
+    itemList.style.display = 'none';
+    feedback.style.display = 'block';
+}
+
+// 戻るボタン機能
+function goBack() {
+    const feedback = document.getElementById('feedback');
+    const itemList = document.querySelector('.container');
+    
+    // フィードバック画面を非表示にし、メイン画面を再表示
+    feedback.style.display = 'none';
+    itemList.style.display = 'flex';
+}
+
 createItemList();
