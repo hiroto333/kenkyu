@@ -176,6 +176,14 @@ function updateDisplay() {
             selectedItemsList.appendChild(li);
         }
     }
+
+}
+
+// リセットボタン機能
+function resetSelection() {
+    selectedItems = {};  // 選択したアイテムをリセット
+    currentWeight = 0;   // 重量をリセット
+    updateDisplay();     // 画面を更新
 }
 
 createItemList();
