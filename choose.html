@@ -14,10 +14,16 @@
         </div>
         <div class="selected-items">
             <h2>自分の非常持ち出し袋</h2>
-            <div class="weight-bar">
-                <div id="weightProgress" class="weight-progress"></div>
+            <div class="progress-bars">
+                <div class="progress-bar">
+                    <div id="weightProgress" class="progress"></div>
+                </div>
+                <div id="weightDisplay">0.0kg / 10kg</div>
+                <div class="progress-bar">
+                    <div id="volumeProgress" class="progress"></div>
+                </div>
+                <div id="volumeDisplay">0.0L / 30L</div>
             </div>
-            <div id="weightDisplay">0.0kg / 10kg</div>
             <button class="reset-button" onclick="resetSelection()">リセット</button>
             <button class="complete-button" onclick="completeSelection()">作成完了</button>
             <ul id="selectedItems" class="selected-list"></ul>

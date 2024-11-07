@@ -70,24 +70,7 @@ h1, h2 {
 .quantity {
     margin: 0 10px;
 }
-.weight-bar {
-    margin-top: 10px;
-    background-color: #eee;
-    border-radius: 10px;
-    height: 20px;
-    overflow: hidden;
-}
-.weight-progress {
-    height: 100%;
-    background-color: #4CAF50;
-    transition: width 0.3s ease;
-}
-.weight-progress.warning {
-    background-color: #FFC107;
-}
-.weight-progress.danger {
-    background-color: #FF5722;
-}
+
 .selected-list {
     margin-top: 15px;
     padding: 0;
@@ -143,4 +126,54 @@ button {
 
 .complete-button:hover {
     background-color: #45a049;
+}
+
+.progress-bars {
+    margin: 10px 0;
+}
+
+.progress-container {
+    margin-bottom: 10px;
+}
+
+.progress-label {
+    display: block;
+    margin-bottom: 5px;
+    font-size: 0.9em;
+    color: #666;
+}
+
+.progress-bar {
+    background-color: #eee;
+    border-radius: 10px;
+    height: 15px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+}
+
+.progress.warning {
+    background-color: #FFC107;
+}
+
+.progress.danger {
+    background-color: #FF5722;
+}
+
+.item-details {
+    display: flex;
+    gap: 10px;
+    font-size: 0.9em;
+    color: #666;
+    margin-top: 5px;
+}
+
+.item-weight, .item-volume, .item-dimensions {
+    background-color: #f0f0f0;
+    padding: 2px 6px;
+    border-radius: 3px;
 }
