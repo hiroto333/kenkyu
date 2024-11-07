@@ -88,7 +88,7 @@ const items = {
 
 let selectedItems = {};
 const maxWeight = 10; // kg
-const maxVolume = 30000; // cm3 (30リットル)
+const maxVolume = 20000; // cm3 (30リットル)
 let currentWeight = 0;
 let currentVolume = 0;
 
