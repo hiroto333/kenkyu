@@ -157,8 +157,8 @@ function updateDisplay() {
     const weightProgress = document.getElementById('weightProgress');
     const volumeProgress = document.getElementById('volumeProgress');
     
-    weightDisplay.textContent = `重量: ${currentWeight.toFixed(1)}kg / ${maxWeight}kg`;
-    volumeDisplay.textContent = `容量: ${(currentVolume/1000).toFixed(1)}L / ${maxVolume/1000}L`;
+    weightDisplay.textContent = `重量： ${currentWeight.toFixed(1)}kg / ${maxWeight}kg`;
+    volumeDisplay.textContent = `容量： ${(currentVolume/1000).toFixed(1)}L / ${maxVolume/1000}L`;
     
     const weightPercentage = (currentWeight / maxWeight) * 100;
     const volumePercentage = (currentVolume / maxVolume) * 100;
