@@ -100,6 +100,16 @@ button {
     background-color: #cc0000; /* ホバー時の赤 */
 }
 
+/* バックボタンのスタイル */
+.back-button {
+    background-color: red; /* バックボタンを赤に */
+    color: white;
+}
+
+.back-button:hover {
+    background-color: #cc0000; /* ホバー時の赤 */
+}
+
 /* - ボタンのスタイル */
 .decrease-button {
     background-color: red; /* - ボタンを赤に */

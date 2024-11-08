@@ -208,31 +208,228 @@ function resetSelection() {
 
 
 // 作成完了ボタン機能
-function completeSelection() {
+function startSimulation() {
     const feedback = document.getElementById('feedback');
     const itemList = document.querySelector('.container');
     const advice = document.getElementById('advice');
 
     // フィードバックの例
-    let adviceText = "<p>非常持ち出し袋の内容:</p><ul>";
-    let issues = false;
+    let adviceText = "<p>非常持ち出し袋の内容:</p>";
 
-    // 簡単なチェック例 (水が少ない場合)
+     // 基本アイテム
+     if (!selectedItems["懐中電灯"] || selectedItems["懐中電灯"] < 1) {
+        adviceText += "<p>懐中電灯がなく、暗闇で移動するのが非常に困難です。障害物にぶつかったり怪我をする危険があります。</p>";
+    }
+    if (!selectedItems["簡易ヘルメット"] || selectedItems["簡易ヘルメット"] < 1) {
+        adviceText += "<p>簡易ヘルメットがないため、落下物から頭を守れません。負傷のリスクが高まります。</p>";
+    }
+    if (!selectedItems["防災ずきん"] || selectedItems["防災ずきん"] < 1) {
+        adviceText += "<p>防災ずきんがなく、頭部の保護ができません。特に子供にとって危険です。</p>";
+    }
+    if (!selectedItems["ホイッスル"] || selectedItems["ホイッスル"] < 1) {
+        adviceText += "<p>ホイッスルがなく、救助を求める際に大きな声を出さなければなりません。声が届かない場合があります。</p>";
+    }
+    if (!selectedItems["紐なしのズック靴"] || selectedItems["紐なしのズック靴"] < 1) {
+        adviceText += "<p>靴がないため、足がガラスの破片やがれきで怪我をする可能性があります。</p>";
+    }
+    if (!selectedItems["雨具"] || selectedItems["雨具"] < 1) {
+        adviceText += "<p>雨具がないため、大雨に濡れ、体温が低下して体調を崩す可能性があります。</p>";
+    }
+    if (!selectedItems["携帯ラジオ"] || selectedItems["携帯ラジオ"] < 1) {
+        adviceText += "<p>携帯ラジオがなく、最新の災害情報が得られません。状況判断が難しくなります。</p>";
+    }
+    if (!selectedItems["モバイルバッテリー"] || selectedItems["モバイルバッテリー"] < 1) {
+        adviceText += "<p>モバイルバッテリーがないため、スマートフォンを充電できず、連絡手段が絶たれる恐れがあります。</p>";
+    }
+    if (!selectedItems["ライター"] || selectedItems["ライター"] < 1) {
+        adviceText += "<p>ライターがなく、火を起こせず暖を取ったり食事を温めたりすることができません。</p>";
+    }
+    if (!selectedItems["マッチ"] || selectedItems["マッチ"] < 1) {
+        adviceText += "<p>マッチがなく、ライターが故障した場合のバックアップがありません。</p>";
+    }
+    if (!selectedItems["ろうそく"] || selectedItems["ろうそく"] < 1) {
+        adviceText += "<p>ろうそくがなく、長時間の停電時に明かりを確保できません。</p>";
+    }
+    if (!selectedItems["ナイフ"] || selectedItems["ナイフ"] < 1) {
+        adviceText += "<p>ナイフがないため、緊急時に物を切ったり、調理ができなかったりします。</p>";
+    }
+    if (!selectedItems["軍手"] || selectedItems["軍手"] < 1) {
+        adviceText += "<p>軍手がなく、がれきを安全に移動させたり手を保護することができません。</p>";
+    }
+
+    // 食料と水
     if (!selectedItems["飲料水(500ml)"] || selectedItems["飲料水(500ml)"] < 3) {
-        adviceText += "<li>飲料水が不足しています。1日最低3本の500mlの水が必要です。</li>";
-        issues = true;
+        adviceText += "<p>飲料水が不足しており、1日以上持たない可能性があります。脱水症状のリスクがあります。</p>";
     }
-
     if (!selectedItems["非常食"] || selectedItems["非常食"] < 3) {
-        adviceText += "<li>非常食が足りません。最低3食分は用意しましょう。</li>";
-        issues = true;
+        adviceText += "<p>非常食が足りないため、十分な栄養を取ることができません。体力が低下します。</p>";
+    }
+    if (!selectedItems["缶切り"] || selectedItems["缶切り"] < 1) {
+        adviceText += "<p>缶切りがなく、缶詰の非常食を開けることができません。</p>";
     }
 
-    if (!issues) {
-        adviceText += "<li>全て問題なく準備ができています。</li>";
+    // 衣類・防寒
+    if (!selectedItems["毛布"] || selectedItems["毛布"] < 1) {
+        adviceText += "<p>毛布がなく、寒さを防げません。体温が低下しやすくなります。</p>";
+    }
+    if (!selectedItems["衣類"] || selectedItems["衣類"] < 1) {
+        adviceText += "<p>衣類がないため、着替えができず、衛生状態が悪化する可能性があります。</p>";
+    }
+    if (!selectedItems["レジャーシート"] || selectedItems["レジャーシート"] < 1) {
+        adviceText += "<p>レジャーシートがなく、地面に直接座らなければなりません。冷気や湿気を防げません。</p>";
     }
 
-    adviceText += "</ul>";
+    // 衛生用品
+    if (!selectedItems["トイレットペーパー"] || selectedItems["トイレットペーパー"] < 1) {
+        adviceText += "<p>トイレットペーパーがなく、衛生状態を保つのが困難です。</p>";
+    }
+    if (!selectedItems["ティッシュペーパー"] || selectedItems["ティッシュペーパー"] < 1) {
+        adviceText += "<p>ティッシュペーパーがないため、必要なときに清潔にできません。</p>";
+    }
+    if (!selectedItems["ウェットティッシュ"] || selectedItems["ウェットティッシュ"] < 1) {
+        adviceText += "<p>ウェットティッシュがなく、手を清潔に保つことができません。感染症のリスクが高まります。</p>";
+    }
+    if (!selectedItems["歯ブラシセット"] || selectedItems["歯ブラシセット"] < 1) {
+        adviceText += "<p>歯ブラシセットがなく、口腔衛生が悪化する可能性があります。</p>";
+    }
+    if (!selectedItems["タオル"] || selectedItems["タオル"] < 1) {
+        adviceText += "<p>タオルがなく、汗や水分を拭くことができず、不快な状態になります。</p>";
+    }
+
+    // 救急・医療
+    if (!selectedItems["救急箱"] || selectedItems["救急箱"] < 1) {
+        adviceText += "<p>救急箱がなく、怪我や病気の応急処置ができません。</p>";
+    }
+    if (!selectedItems["マスク"] || selectedItems["マスク"] < 1) {
+        adviceText += "<p>マスクがなく、感染症や粉塵から守れません。</p>";
+    }
+    if (!selectedItems["アルコール消毒"] || selectedItems["アルコール消毒"] < 1) {
+        adviceText += "<p>アルコール消毒がなく、手を消毒できません。感染のリスクがあります。</p>";
+    }
+    if (!selectedItems["体温計"] || selectedItems["体温計"] < 1) {
+        adviceText += "<p>体温計がなく、体調の変化に気づくことが遅れる可能性があります。</p>";
+    }
+
+    // 工具・その他
+    if (!selectedItems["布製ガムテープ"] || selectedItems["布製ガムテープ"] < 1) {
+        adviceText += "<p>布製ガムテープがなく、応急修理ができません。</p>";
+    }
+    if (!selectedItems["ポリ袋"] || selectedItems["ポリ袋"] < 1) {
+        adviceText += "<p>ポリ袋がなく、ゴミや汚物を処理するのが困難です。</p>";
+    }
+    if (!selectedItems["筆記用具"] || selectedItems["筆記用具"] < 1) {
+        adviceText += "<p>筆記用具がなく、メモを取ったり、必要な情報を書き留めたりすることができません。</p>"; 
+    }
+    if (!selectedItems["ロープ"] || selectedItems["ロープ"] < 1) {
+        adviceText += "<p>ロープがなく、荷物を固定したり、応急的に使用したりすることができません。</p>";
+    }
+    // 貴重品
+    if (!selectedItems["現金"] || selectedItems["現金"] < 1) {
+        adviceText += "<p>現金がなく、停電時に電子決済が使えない場合、物を購入することができません。</p>";
+    }
+    if (!selectedItems["預貯金通帳"] || selectedItems["預貯金通帳"] < 1) {
+        adviceText += "<p>預貯金通帳がなく、本人確認が必要なときに不便です。</p>";
+    }
+    if (!selectedItems["健康保険証"] || selectedItems["健康保険証"] < 1) {
+        adviceText += "<p>健康保険証がなく、病院で治療を受ける際に不便が生じます。</p>";
+    }
+    if (!selectedItems["運転免許証"] || selectedItems["運転免許証"] < 1) {
+        adviceText += "<p>運転免許証がなく、身分証明が必要な場面で困ることがあります。</p>";
+    }
+    if (!selectedItems["パスポート"] || selectedItems["パスポート"] < 1) {
+        adviceText += "<p>パスポートがなく、海外避難が必要な場合に大変不便です。</p>";
+    }
+    if (!selectedItems["印鑑"] || selectedItems["印鑑"] < 1) {
+        adviceText += "<p>印鑑がなく、重要な手続きがスムーズに進まない場合があります。</p>";
+    }
+    if (!selectedItems["コンタクトレンズ"] || selectedItems["コンタクトレンズ"] < 1) {
+        adviceText += "<p>コンタクトレンズがなく、視力が悪い人は見えにくい状態が続いてしまいます。</p>";
+    }
+    if (!selectedItems["お薬手帳"] || selectedItems["お薬手帳"] < 1) {
+        adviceText += "<p>お薬手帳がなく、持病のある人は薬の情報を適切に管理できません。</p>";
+    }
+    if (!selectedItems["鍵"] || selectedItems["鍵"] < 1) {
+        adviceText += "<p>鍵がなく、家や車に入ることができません。</p>";
+    }
+
+    // 赤ちゃん用品
+    if (!selectedItems["哺乳瓶"] || selectedItems["哺乳瓶"] < 1) {
+        adviceText += "<p>哺乳瓶がなく、赤ちゃんにミルクをあげることができません。</p>";
+    }
+    if (!selectedItems["粉ミルク"] || selectedItems["粉ミルク"] < 1) {
+        adviceText += "<p>粉ミルクがなく、赤ちゃんが空腹になってしまいます。</p>";
+    }
+    if (!selectedItems["離乳食"] || selectedItems["離乳食"] < 1) {
+        adviceText += "<p>離乳食がなく、月齢に合った食事を用意できません。</p>";
+    }
+    if (!selectedItems["おやつ"] || selectedItems["おやつ"] < 1) {
+        adviceText += "<p>おやつがなく、赤ちゃんの機嫌を保つのが難しくなります。</p>";
+    }
+    if (!selectedItems["スプーン"] || selectedItems["スプーン"] < 1) {
+        adviceText += "<p>スプーンがなく、赤ちゃんに離乳食を与えるのが難しくなります。</p>";
+    }
+    if (!selectedItems["洗浄綿"] || selectedItems["洗浄綿"] < 1) {
+        adviceText += "<p>洗浄綿がなく、赤ちゃんの衛生を保てません。</p>";
+    }
+    if (!selectedItems["紙おむつ"] || selectedItems["紙おむつ"] < 1) {
+        adviceText += "<p>紙おむつがなく、赤ちゃんのおむつ替えができません。</p>";
+    }
+    if (!selectedItems["おしりふき"] || selectedItems["おしりふき"] < 1) {
+        adviceText += "<p>おしりふきがなく、おむつ替えの際に不便です。</p>";
+    }
+    if (!selectedItems["おんぶひも"] || selectedItems["おんぶひも"] < 1) {
+        adviceText += "<p>おんぶひもがなく、両手を空けて赤ちゃんを抱っこすることができません。</p>";
+    }
+    if (!selectedItems["玩具"] || selectedItems["玩具"] < 1) {
+        adviceText += "<p>玩具がなく、赤ちゃんの気を引くものがないため、ぐずりやすくなります。</p>";
+    }
+    if (!selectedItems["母子手帳"] || selectedItems["母子手帳"] < 1) {
+        adviceText += "<p>母子手帳がなく、赤ちゃんの予防接種歴などの情報を確認できません。</p>";
+    }
+    if (!selectedItems["ベビーカー"] || selectedItems["ベビーカー"] < 1) {
+        adviceText += "<p>ベビーカーがなく、赤ちゃんを長時間抱っこして移動するのが大変です。</p>";
+    }
+
+    // 高齢者用品
+    if (!selectedItems["高齢者手帳"] || selectedItems["高齢者手帳"] < 1) {
+        adviceText += "<p>高齢者手帳がなく、医療情報や保険情報が確認できません。</p>";
+    }
+    if (!selectedItems["予備メガネ"] || selectedItems["予備メガネ"] < 1) {
+        adviceText += "<p>予備メガネがなく、視力が悪い高齢者は見えにくくなります。</p>";
+    }
+    if (!selectedItems["おむつ"] || selectedItems["おむつ"] < 1) {
+        adviceText += "<p>おむつがなく、高齢者が快適に過ごせない可能性があります。</p>";
+    }
+    if (!selectedItems["看護用品"] || selectedItems["看護用品"] < 1) {
+        adviceText += "<p>看護用品がなく、必要なケアを行うことができません。</p>";
+    }
+    if (!selectedItems["持病薬"] || selectedItems["持病薬"] < 1) {
+        adviceText += "<p>持病薬がなく、健康状態が悪化する危険があります。</p>";
+    }
+    if (!selectedItems["おしりふき"] || selectedItems["おしりふき"] < 1) {
+        adviceText += "<p>おしりふきがなく、清潔保持が困難です。</p>";
+    }
+    if (!selectedItems["補聴器"] || selectedItems["補聴器"] < 1) {
+        adviceText += "<p>補聴器がなく、高齢者がコミュニケーションを取れません。</p>";
+    }
+    if (!selectedItems["杖"] || selectedItems["杖"] < 1) {
+        adviceText += "<p>杖がなく、歩行が不安定な高齢者が転倒するリスクがあります。</p>";
+    }
+
+    // 女性用品
+    if (!selectedItems["生理用品"] || selectedItems["生理用品"] < 1) {
+        adviceText += "<p>生理用品がなく、避難所での衛生管理が困難です。</p>";
+    }
+    if (!selectedItems["サニタリーショーツ"] || selectedItems["サニタリーショーツ"] < 1) {
+        adviceText += "<p>サニタリーショーツがなく、快適に過ごすのが難しくなります。</p>";
+    }
+    if (!selectedItems["防災ブザー"] || selectedItems["防災ブザー"] < 1) {
+        adviceText += "<p>防災ブザーがなく、緊急時に助けを呼ぶ手段が限られます。</p>";
+    }
+    if (!selectedItems["中身の見えないゴミ袋"] || selectedItems["中身の見えないゴミ袋"] < 1) {
+        adviceText += "<p>中身の見えないゴミ袋がなく、プライバシーを守ることが難しくなります。</p>";
+    }
+
     advice.innerHTML = adviceText;
 
     // メイン画面を非表示にし、フィードバック画面を表示
