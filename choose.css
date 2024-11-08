@@ -91,48 +91,21 @@ button {
     transition: background-color 0.3s;
 }
 /* リセットボタンのスタイル */
-.reset-button {
+.reset-button, .back-button, .decrease-button {
     background-color: red; /* リセットボタンを赤に */
     color: white;
 }
 
-.reset-button:hover {
+.reset-button:hover, .back-button:hover, .decrease-button:hover {
     background-color: #cc0000; /* ホバー時の赤 */
 }
 
-/* バックボタンのスタイル */
-.back-button {
-    background-color: red; /* バックボタンを赤に */
-    color: white;
-}
-
-.back-button:hover {
-    background-color: #cc0000; /* ホバー時の赤 */
-}
-
-/* - ボタンのスタイル */
-.decrease-button {
-    background-color: red; /* - ボタンを赤に */
-    color: white;
-}
-
-.decrease-button:hover {
-    background-color: #cc0000; /* ホバー時の赤 */
-}
-.increase-button {
+.increase-button, .complete-button {
     background-color: #4CAF50;
     color: white;
 }
 
-.increase-button:hover {
-    background-color: #45a049;
-}
-.complete-button {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.complete-button:hover {
+.increase-button:hover, .complete-button:hover {
     background-color: #45a049;
 }
 
