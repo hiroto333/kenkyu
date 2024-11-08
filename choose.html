@@ -14,20 +14,26 @@
         </div>
         <div class="selected-items">
             <h2>自分の非常持ち出し袋</h2>
-            <div class="weight-bar">
-                <div id="weightProgress" class="weight-progress"></div>
+            <div class="progress-bars">
+                <div class="progress-bar">
+                    <div id="weightProgress" class="progress"></div>
+                </div>
+                <div id="weightDisplay">重量： 0.0kg / 10kg</div>
+                <div class="progress-bar">
+                    <div id="volumeProgress" class="progress"></div>
+                </div>
+                <div id="volumeDisplay">容量： 0.0L / 20L</div>
             </div>
-            <div id="weightDisplay">0.0kg / 10kg</div>
             <button class="reset-button" onclick="resetSelection()">リセット</button>
-            <button class="complete-button" onclick="completeSelection()">作成完了</button>
+            <button class="complete-button" onclick="startSimulation()">作成完了</button>
             <ul id="selectedItems" class="selected-list"></ul>
         </div>
     </div>
 
     <div id="feedback" style="display:none">
-        <h2>フィードバック</h2>
+        <h2>疑似避難体験</h2>
         <div id="advice"></div>
-        <button onclick="goBack()">戻る</button>
+        <button class="back-button" onclick="goBack()">終了</button>
     </div>
 
     <script src="./choose.js" type="application/javascript"></script>
