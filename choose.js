@@ -88,7 +88,7 @@ const items = {
 
 let selectedItems = {};
 const maxWeight = 10; // kg
-const maxVolume = 20000; // cm3 (30リットル)
+const maxVolume = 30000; // cm3 (30リットル)
 let currentWeight = 0;
 let currentVolume = 0;
 
@@ -96,8 +96,8 @@ function createItemList() {
     const itemList = document.getElementById('itemList');
     for (const [category, categoryItems] of Object.entries(items)) {
         const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'category';
-        categoryDiv.innerHTML = `<h2>${category}</h2>`;
+        //categoryDiv.className = 'category';
+        //categoryDiv.innerHTML = `<h2>${category}</h2>`;
         
         categoryItems.forEach(item => {
             const itemDiv = document.createElement('div');
