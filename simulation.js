@@ -2,7 +2,7 @@ const scenarios = [
     {
         title: "停電発生",
         description: "夜間に大規模停電が発生。懐中電灯がないと避難経路が確認できません。",
-        requiredItems: ["懐中電灯", "予備電池"],
+        requiredItems: ["懐中電灯"],
         image: "flashlight-7481941_1280.jpg",
         consequence: "暗闇の中で避難経路を見失う可能性があります。"
     },
