@@ -8,6 +8,7 @@ const items = {
         { name: "雨具", weight: 0.3, volume: 500, explanation: "携帯用のポンチョタイプが場所を取らず便利。", unit: "着", dimensions: "20×15×2cm" },
         { name: "携帯ラジオ", weight: 0.2, volume: 250, explanation: "災害情報の入手に必須。手回し充電タイプが推奨。", unit: "台", dimensions: "10×5×5cm" },
         { name: "モバイルバッテリー", weight: 0.3, volume: 200, explanation: "スマートフォンの充電用。容量10000mAh程度が適当。", unit: "個", dimensions: "10×6×2cm" },
+        { name: "簡易トイレ", weight: 0.1, volume: 200, explanation: "簡易的なトイレ。自分に必要な分必要。", unit: "個", dimensions: "25×15×1cm" },
         { name: "ライター", weight: 0.05, volume: 50, explanation: "火起こしや照明用。防水マッチと併用がおすすめ。", unit: "個", dimensions: "8×2×1cm" },
         { name: "マッチ", weight: 0.05, volume: 30, explanation: "防水タイプが望ましい。ライターのバックアップとして。", unit: "箱", dimensions: "5×3×2cm" },
         { name: "ろうそく", weight: 0.1, volume: 100, explanation: "長時間の照明として。火災に注意。", unit: "本", dimensions: "10×2×2cm" },
@@ -16,20 +17,24 @@ const items = {
     ],
     "食料と水": [
         { name: "飲料水(500ml)", weight: 0.5, volume: 500, explanation: "1人1日3リットルが目安。必要最小限でも500ml×3本。", unit: "本", dimensions: "21×7×7cm" },
-        { name: "非常食", weight: 0.2, volume: 400, explanation: "3食分以上。賞味期限の長いもの。缶詰やレトルト食品。", unit: "食", dimensions: "15×10×3cm" },
+        { name: "非常食(一食)", weight: 0.2, volume: 400, explanation: "3食分以上。賞味期限の長いもの。缶詰やレトルト食品。", unit: "食", dimensions: "15×10×3cm" },
         { name: "缶切り", weight: 0.1, volume: 50, explanation: "缶詰を開けるため。プルトップ式でない缶詰がある場合に必要。", unit: "個", dimensions: "10×5×1cm" }
     ],
     "衣類・防寒": [
         { name: "毛布", weight: 0.8, volume: 3000, explanation: "防寒、睡眠用。アルミブランケットは軽量で代用可。", unit: "枚", dimensions: "30×20×5cm" },
         { name: "衣類", weight: 0.5, volume: 2000, explanation: "下着を含む着替え一式。速乾性の素材が望ましい。", unit: "組", dimensions: "25×20×4cm" },
-        { name: "レジャーシート", weight: 0.2, volume: 300, explanation: "地面に敷いて使用。断熱効果もある。", unit: "枚", dimensions: "15×10×2cm" }
+        { name: "レジャーシート", weight: 0.2, volume: 300, explanation: "地面に敷いて使用。断熱効果もある。", unit: "枚", dimensions: "15×10×2cm" },
+        { name: "使い捨てカイロ", weight: 0.1, volume: 100, explanation: "使い捨てられるカイロ。", unit: "枚", dimensions: "10×10×10cm" },
+        { name: "アルミシート", weight: 0.2, volume: 800, explanation: "体に巻くと保温できる。", unit: "個", dimensions: "10×10×10cm" }
     ],
     "衛生用品": [
         { name: "トイレットペーパー", weight: 0.2, volume: 1000, explanation: "必要最小限の量を持参。圧縮タイプが便利。", unit: "巻", dimensions: "10×10×10cm" },
         { name: "ティッシュペーパー", weight: 0.1, volume: 400, explanation: "小包装のものが便利。様々な用途に使用可能。", unit: "箱", dimensions: "12×6×6cm" },
         { name: "ウェットティッシュ", weight: 0.2, volume: 500, explanation: "清潔保持に。除菌タイプが望ましい。", unit: "パック", dimensions: "15×10×3cm" },
         { name: "歯ブラシセット", weight: 0.1, volume: 200, explanation: "歯磨き粉、洗口液含む。衛生管理に重要。", unit: "セット", dimensions: "20×5×2cm" },
-        { name: "タオル", weight: 0.2, volume: 500, explanation: "清潔なタオル。多目的に使用可能。", unit: "枚", dimensions: "25×12×2cm" }
+        { name: "タオル", weight: 0.2, volume: 500, explanation: "清潔なタオル。多目的に使用可能。", unit: "枚", dimensions: "25×12×2cm" },
+        { name: "石鹸", weight: 0.2, volume: 500, explanation: "手洗い用。清潔保持に。", unit: "個", dimensions: "25×12×2cm" },
+        { name: "ドライシャンプー", weight: 0.2, volume: 500, explanation: "お風呂に入れない時用。清潔保持に。", unit: "個", dimensions: "25×12×2cm" },
     ],
     "救急・医療": [
         { name: "救急箱", weight: 0.5, volume: 2000, explanation: "基本的な救急用品一式。常備薬も含める。", unit: "セット", dimensions: "20×15×7cm" },
@@ -41,7 +46,12 @@ const items = {
         { name: "布製ガムテープ", weight: 0.2, volume: 300, explanation: "多用途に使える。補修や固定に便利。", unit: "巻", dimensions: "10×10×3cm" },
         { name: "ポリ袋", weight: 0.1, volume: 200, explanation: "ゴミ袋としても、防水袋としても使用可能。", unit: "組", dimensions: "20×15×1cm" },
         { name: "筆記用具", weight: 0.1, volume: 100, explanation: "メモを取るため。油性ペンがあると便利。", unit: "セット", dimensions: "15×5×1cm" },
-        { name: "ロープ", weight: 0.3, volume: 500, explanation: "荷物の固定や応急措置に。パラコードが軽量で丈夫。", unit: "巻", dimensions: "15×15×3cm" }
+        { name: "避難地図", weight: 0.1, volume: 100, explanation: "周辺の避難地図。あると便利。", unit: "枚", dimensions: "15×5×1cm" },
+        { name: "ロープ", weight: 0.3, volume: 500, explanation: "荷物の固定や応急措置に。パラコードが軽量で丈夫。", unit: "巻", dimensions: "15×15×3cm" },
+        { name: "電池", weight: 0.08, volume: 50, explanation: "予備の電池。", unit: "個", dimensions: "8×2×1cm" },
+        { name: "ラップ", weight: 0.08, volume: 50, explanation: "食器に覆って使うと，節水に。止血もできる．", unit: "個", dimensions: "8×2×1cm" },
+        { name: "安眠グッズ（耳栓・アイマスク）", weight: 0.08, volume: 50, explanation: "騒音対策に。寝れない人向け。", unit: "個", dimensions: "8×2×1cm" },    
+        { name: "トランプ", weight: 0.08, volume: 50, explanation: "暇な避難所生活に。", unit: "個", dimensions: "8×2×1cm" } 
     ],
     "貴重品": [
         { name: "現金", weight: 0.1, volume: 50, explanation: "小銭を含む現金。ATMが使えない状況を想定。", unit: "セット", dimensions: "10×7×1cm" },
@@ -54,7 +64,7 @@ const items = {
         { name: "お薬手帳", weight: 0.05, volume: 30, explanation: "持病のある方は必須。薬の情報確認用。", unit: "冊", dimensions: "15×9×0.5cm" },
         { name: "鍵", weight: 0.05, volume: 20, explanation: "家や車の鍵。予備があれば持参。", unit: "セット", dimensions: "5×3×1cm" }
     ],
-    "赤ちゃん用品": [
+    /*"赤ちゃん用品": [
         { name: "哺乳瓶", weight: 0.2, volume: 300, explanation: "清潔なものを複数用意。", unit: "本", dimensions: "15×7×7cm" },
         { name: "粉ミルク", weight: 0.3, volume: 500, explanation: "携帯用の小分けパックが便利。", unit: "回分", dimensions: "15×10×3cm" },
         { name: "離乳食", weight: 0.2, volume: 400, explanation: "月齢に応じたものを用意。", unit: "食", dimensions: "12×8×4cm" },
@@ -83,7 +93,7 @@ const items = {
         { name: "サニタリーショーツ", weight: 0.1, volume: 200, explanation: "生理時に使用。速乾性のものが望ましい。", unit: "枚", dimensions: "20×15×1cm" },
         { name: "防災ブザー", weight: 0.05, volume: 50, explanation: "緊急時に助けを呼ぶために。ホイッスルと併用も可能。", unit: "個", dimensions: "8×4×2cm" },
         { name: "中身の見えないゴミ袋", weight: 0.1, volume: 200, explanation: "プライバシーを守るために使用。", unit: "組", dimensions: "20×15×1cm" }
-    ]
+    ]*/
 };
 
 let selectedItems = {};
