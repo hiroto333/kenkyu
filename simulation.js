@@ -58,11 +58,7 @@ document.querySelectorAll('.navigation button')[0].addEventListener('click', () 
 
 // ナビゲーションボタン: 次へ
 document.querySelectorAll('.navigation button')[1].addEventListener('click', () => {
-    if (isRandomMode) {
-        currentIndex = Math.floor(Math.random() * scenarios.length); // ランダムモード時はランダムに切り替え
-    } else {
-        currentIndex = (currentIndex + 1) % scenarios.length; // 通常モード時は次のシナリオに移動
-    }
+    currentIndex = Math.floor(Math.random() * scenarios.length); // ランダムモード時はランダムに切り替え
     updateScenario();
 });
 

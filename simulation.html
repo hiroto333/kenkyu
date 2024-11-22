@@ -1,55 +1,35 @@
 <!DOCTYPE html>
-    <html lang="ja">
-    <head>
-        <meta charset="UTF-8">
-        <title>災害発生後の疑似避難体験</title>
-        <link rel="stylesheet" href="./simulation.css" type="text/css"/>
-    </head>
-    <body>
-        <div class="container">
-            <div class="header">
-                <h1>対応できない状況</h1>
-            </div>
-    
-            <div class="scenario-container">
-                <img id="scenarioImage" class="scenario-image" src="/api/placeholder/800/300" alt="シナリオ画像">
-                <div class="scenario-content">
-                    <h2 id="scenarioTitle" class="scenario-title"></h2>
-                    <p id="scenarioDescription" class="scenario-description"></p>
-                    <div class="required-items">
-                        <h3>必要な非常持ち出し品:</h3>
-                        <p id="requiredItems"></p>
-                    </div>
-                    <div class="consequence">
-                        <h3>対応できない場合の結果:</h3>
-                        <p id="consequence"></p>
-                    </div>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>災害発生後の疑似避難体験</title>
+    <link rel="stylesheet" href="./simulation.css" type="text/css"/>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>対応できない状況</h1>
+        </div>
+
+        <div class="scenario-container">
+            <img id="scenarioImage" class="scenario-image" src="/api/placeholder/800/300" alt="シナリオ画像">
+            <div class="scenario-content">
+                <h2 id="scenarioTitle" class="scenario-title"></h2>
+                <p id="scenarioDescription" class="scenario-description"></p>
+                <div class="required-items">
+                    <h3>必要な非常持ち出し品:</h3>
+                    <p id="requiredItems"></p>
+                </div>
+                <div class="consequence">
+                    <h3>対応できない場合の結果:</h3>
+                    <p id="consequence"></p>
                 </div>
             </div>
-    
-            <div class="navigation">
-                <button id="prevButton" class="nav-button">前へ</button>
-                <button id="nextButton" class="nav-button">次へ</button>
-            </div>
         </div>
-    
-        <script src="./simulation.js" type="application/javascript"></script>
-    </body>
-    </html>
-    <div id="simulationContainer" style="display: none;">
-        <div class="simulation-header">
-            <h1>非常持ち出し袋シミュレーション結果</h1>
-            <p>選択された持ち出し品で対応できる/できない状況をシミュレーションします。</p>
-        </div>
-        
-        <div id="scenarioContainer">
-            <!-- シナリオがここに動的に追加されます -->
-        </div>
-        
-        <div class="simulation-controls">
-            <button onclick="returnToMain()" class="back-button">
-                選択画面に戻る
-            </button>
+
+        <div class="navigation">
+            <button id="prevButton" class="nav-button">前へ</button>
+            <button id="nextButton" class="nav-button">次へ</button>
         </div>
     </div>
 
