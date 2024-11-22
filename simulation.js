@@ -1,3 +1,4 @@
+// シナリオデータ
 const scenarios = [
     {
         title: "停電発生",
@@ -22,48 +23,58 @@ const scenarios = [
     }
 ];
 
-let currentIndex = 0;
-let isRandomMode = false;
+let currentIndex = 0; // 現在表示中のシナリオのインデックス
 
+// シナリオを更新して画面に表示する関数
 const updateScenario = () => {
     const scenario = scenarios[currentIndex];
+
+    // シナリオタイトルと内容を更新
     document.getElementById('scenarioTitle').textContent = scenario.title;
+
+    // 必要な非常持ち出し品を更新
     const requiredItemsElement = document.querySelector('.required-items');
     requiredItemsElement.innerHTML = `
         <h3>必要な非常持ち出し品:</h3>
         <p>${scenario.requiredItems.join(', ')}</p>
     `;
+
+    // 対応できない場合の結果を更新
     const consequenceElement = document.querySelector('.consequence');
     consequenceElement.innerHTML = `
         <h3>対応できない場合の結果:</h3>
         <p>${scenario.consequence}</p>
     `;
+
+    // シナリオ画像を更新
     document.getElementById('scenarioImage').src = scenario.image;
 };
 
-// ナビゲーションボタンにイベントリスナーを追加
+// ナビゲーションボタン: 前へ
 document.querySelectorAll('.navigation button')[0].addEventListener('click', () => {
-    if (!isRandomMode) {
-        currentIndex = (currentIndex - 1 + scenarios.length) % scenarios.length;
-        updateScenario();
-    }
+    currentIndex = (currentIndex - 1 + scenarios.length) % scenarios.length; // 前のシナリオに移動
+    updateScenario();
 });
 
+// ナビゲーションボタン: 次へ
 document.querySelectorAll('.navigation button')[1].addEventListener('click', () => {
     if (isRandomMode) {
-        currentIndex = Math.floor(Math.random() * scenarios.length);
+        currentIndex = Math.floor(Math.random() * scenarios.length); // ランダムモード時はランダムに切り替え
     } else {
-        currentIndex = (currentIndex + 1) % scenarios.length;
+        currentIndex = (currentIndex + 1) % scenarios.length; // 通常モード時は次のシナリオに移動
     }
     updateScenario();
 });
 
+// シミュレーション結果を表示する関数
 function updateSimulationFeedback(selectedItems) {
+    // 必要なアイテムが不足しているシナリオを判定
     const scenarioAdvices = scenarios.map(scenario => {
         const missingRequiredItems = scenario.requiredItems.filter(
             requiredItem => !selectedItems[requiredItem] || selectedItems[requiredItem] < 1
         );
 
+        // 必要なアイテムが不足している場合のみ返す
         if (missingRequiredItems.length > 0) {
             return {
                 title: scenario.title,
@@ -74,8 +85,9 @@ function updateSimulationFeedback(selectedItems) {
             };
         }
         return null;
-    }).filter(advice => advice !== null);
+    }).filter(advice => advice !== null); // 不要な null を除外
 
+    // 結果をHTMLとして生成
     let adviceHTML = scenarioAdvices.map(scenario => `
         <div class="scenario-advice">
             <h3>${scenario.title}</h3>
@@ -86,17 +98,19 @@ function updateSimulationFeedback(selectedItems) {
         </div>
     `).join('');
 
+    // すべて対応可能な場合のメッセージ
     if (scenarioAdvices.length === 0) {
         adviceHTML = "<p>現在の持ち出し袋で、シミュレーション上の課題に対応できます。</p>";
     }
 
+    // フィードバックエリアを更新
     const feedback = document.getElementById('feedback');
     feedback.innerHTML = adviceHTML;
-    
+
     // フィードバック画面を表示
     document.querySelector('.container').style.display = 'none';
     feedback.style.display = 'block';
 }
 
-// 初期表示
+// 初期表示を設定
 updateScenario();
