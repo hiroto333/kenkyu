@@ -97,12 +97,13 @@ button {
     background-color: #1976d2;
 }
 
-.random-button {
+.back-button {
+    margin-top: 20px;
     background-color: #4caf50;
     color: white;
 }
 
-.random-button:hover {
+.back-button:hover {
     background-color: #388e3c;
 }
 

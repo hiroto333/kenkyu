@@ -25,7 +25,12 @@
                 <div id="volumeDisplay">容量： 0.0L / 30L</div>
             </div>
             <button class="reset-button" onclick="resetSelection()">リセット</button>
-            <button class="complete-button" onclick="location.href='./simulation.html'">作成完了</button>
+            <button class="complete-button" onclick="completeSelection()">作成完了</button>
+            <div id="feedback" style="display: none;">
+                <h2>シミュレーション結果</h2>
+                <div id="feedbackContent"></div>
+                <button class="simulate-button" onclick="startSimulation()">シミュレーションを開始</button>
+            </div>
             <ul id="selectedItems" class="selected-list"></ul>
         </div>
     </div>

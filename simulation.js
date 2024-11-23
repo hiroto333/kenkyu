@@ -20,93 +20,173 @@ const scenarios = [
         requiredItems: ["毛布", "使い捨てカイロ"],
         image: "/api/placeholder/800/300",
         consequence: "体温低下による健康被害のリスクがあります。"
+    },
+    {
+        title: "水不足",
+        description: "避難所での水の配給が少ない。",
+        requiredItems: ["飲料水(500ml)"],
+        minQuantity: 3,
+        image: "/api/placeholder/800/300",
+        consequence: "水不足による健康被害のリスクがあります。"
+    },
+    {
+        title: "プライバシー問題",
+        description: "避難所において、プライバシーが確保されていない。",
+        requiredItems: ["耳栓", "アイマスク", "レジャーシート"],
+        image: "/api/placeholder/800/300",
+        consequence: "プライバシーが確保されず，大きなストレスとなるリスクがあります。"
+    },
+    {
+        title: "不潔な髪の毛",
+        description: "避難所に、シャンプーやシャワーが置いていない。",
+        requiredItems: ["ドライシャンプー"],
+        image: "/api/placeholder/800/300",
+        consequence: "髪が洗えず、衛生的に辛くなる可能性があります。"
+    },
+    {
+        title: "感染症",
+        description: "生活用水がひっ迫したことで衛生環境が悪化し、手洗いが十分に行えない。",
+        requiredItems: ["石鹸", "ウェットティッシュ"],
+        image: "/api/placeholder/800/300",
+        consequence: "新型コロナやインフルエンザ、ノロウイルスなどの感染症がまん延するリスクがあります。"
+    },
+    {
+        title: "トイレ問題",
+        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        requiredItems: ["簡易トイレ"],
+        minQuantity: 15,
+        image: "/api/placeholder/800/300",
+        consequence: "トイレが混んでいて，行けない可能性があります。"
+    },
+    {
+        title: "情報が知りたい問題",
+        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        requiredItems: ["携帯ラジオ"],
+        image: "/api/placeholder/800/300",
+        consequence: "トイレが混んでいて，行けない可能性があります。"
+    },
+    {
+        title: "ナイフ問題",
+        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        requiredItems: ["ナイフ"],
+        image: "/api/placeholder/800/300",
+        consequence: "トイレが混んでいて，行けない可能性があります。"
+    },
+    {
+        title: "ろうそく問題",
+        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        requiredItems: ["ろうそく"],
+        image: "/api/placeholder/800/300",
+        consequence: "トイレが混んでいて，行けない可能性があります。"
     }
 ];
 
-let currentIndex = 0; // 現在表示中のシナリオのインデックス
+let displayedScenarios = [];  // 表示済みシナリオを追跡
+let simulationCount = 0;      // シミュレーション回数を追跡
+const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || {};
 
-// シナリオを更新して画面に表示する関数
-const updateScenario = () => {
-    const scenario = scenarios[currentIndex];
+// 対応できないシナリオを特定する関数
+function getUnhandledScenarios(selectedItems) {
+    const unhandledScenarios = [];
+    
+    for (const scenario of scenarios) {
+        if (scenario.title === "水不足") {
+            // 水不足シナリオの特別処理
+            const waterQuantity = selectedItems["飲料水(500ml)"] || 0;
+            if (waterQuantity < 3) {
+                unhandledScenarios.push(scenario);
+            }
+        } else if (scenario.title === "トイレ問題") {
+            // トイレ問題シナリオの特別処理
+            const toiletQuantity = selectedItems["簡易トイレ"] || 0;
+            if (toiletQuantity < 15) {
+                unhandledScenarios.push(scenario);
+            }
+        } else {
+            // その他のシナリオ処理
+            const hasRequiredItems = scenario.requiredItems.some(item => 
+                selectedItems[item] && selectedItems[item] > 0
+            );
+            if (!hasRequiredItems) {
+                unhandledScenarios.push(scenario);
+            }
+        }
+    }
+    
+    return unhandledScenarios;
+}
 
-    // シナリオタイトルと内容を更新
+// ランダムな未表示シナリオを取得する関数
+function getNextScenario(unhandledScenarios) {
+    const availableScenarios = unhandledScenarios.filter(
+        scenario => !displayedScenarios.includes(scenario.title)
+    );
+    
+    if (availableScenarios.length === 0) {
+        // すべてのシナリオを表示済みの場合、表示履歴をリセット
+        displayedScenarios = [];
+        return unhandledScenarios[Math.floor(Math.random() * unhandledScenarios.length)];
+    }
+    
+    return availableScenarios[Math.floor(Math.random() * availableScenarios.length)];
+}
+
+// シナリオを表示する関数
+function displayScenario(scenario) {
     document.getElementById('scenarioTitle').textContent = scenario.title;
-
-    // 必要な非常持ち出し品を更新
     const requiredItemsElement = document.querySelector('.required-items');
     requiredItemsElement.innerHTML = `
         <h3>必要な非常持ち出し品:</h3>
-        <p>${scenario.requiredItems.join(', ')}</p>
+        <p>${scenario.requiredItems.join(', ')}${scenario.minQuantity ? ` (${scenario.minQuantity}個以上)` : ''}</p>
     `;
-
-    // 対応できない場合の結果を更新
+    
     const consequenceElement = document.querySelector('.consequence');
     consequenceElement.innerHTML = `
         <h3>対応できない場合の結果:</h3>
         <p>${scenario.consequence}</p>
     `;
-
-    // シナリオ画像を更新
+    
     document.getElementById('scenarioImage').src = scenario.image;
-};
-
-// ナビゲーションボタン: 前へ
-document.querySelectorAll('.navigation button')[0].addEventListener('click', () => {
-    currentIndex = (currentIndex - 1 + scenarios.length) % scenarios.length; // 前のシナリオに移動
-    updateScenario();
-});
-
-// ナビゲーションボタン: 次へ
-document.querySelectorAll('.navigation button')[1].addEventListener('click', () => {
-    currentIndex = Math.floor(Math.random() * scenarios.length); // ランダムモード時はランダムに切り替え
-    updateScenario();
-});
-
-// シミュレーション結果を表示する関数
-function updateSimulationFeedback(selectedItems) {
-    // 必要なアイテムが不足しているシナリオを判定
-    const scenarioAdvices = scenarios.map(scenario => {
-        const missingRequiredItems = scenario.requiredItems.filter(
-            requiredItem => !selectedItems[requiredItem] || selectedItems[requiredItem] < 1
-        );
-
-        // 必要なアイテムが不足している場合のみ返す
-        if (missingRequiredItems.length > 0) {
-            return {
-                title: scenario.title,
-                description: scenario.description,
-                consequence: scenario.consequence,
-                missingItems: missingRequiredItems,
-                image: scenario.image
-            };
-        }
-        return null;
-    }).filter(advice => advice !== null); // 不要な null を除外
-
-    // 結果をHTMLとして生成
-    let adviceHTML = scenarioAdvices.map(scenario => `
-        <div class="scenario-advice">
-            <h3>${scenario.title}</h3>
-            <img src="${scenario.image}" alt="${scenario.title}" class="scenario-image">
-            <p>${scenario.description}</p>
-            <p>不足アイテム: ${scenario.missingItems.join(', ')}</p>
-            <p class="consequence">想定される結果: ${scenario.consequence}</p>
-        </div>
-    `).join('');
-
-    // すべて対応可能な場合のメッセージ
-    if (scenarioAdvices.length === 0) {
-        adviceHTML = "<p>現在の持ち出し袋で、シミュレーション上の課題に対応できます。</p>";
-    }
-
-    // フィードバックエリアを更新
-    const feedback = document.getElementById('feedback');
-    feedback.innerHTML = adviceHTML;
-
-    // フィードバック画面を表示
-    document.querySelector('.container').style.display = 'none';
-    feedback.style.display = 'block';
+    displayedScenarios.push(scenario.title);
 }
 
-// 初期表示を設定
-updateScenario();
+// シミュレーションを開始/更新する関数
+function updateSimulation(selectedItems) {
+    const unhandledScenarios = getUnhandledScenarios(selectedItems);
+    
+    if (unhandledScenarios.length === 0) {
+        // すべてのシナリオに対応可能な場合
+        document.getElementById('feedback').innerHTML = 
+            "<p>現在の持ち出し袋で、すべてのシナリオに対応できます。</p>";
+        return;
+    }
+    
+    if (simulationCount >= 10) {
+        // 10回のシミュレーション後、続行するかユーザーに確認
+        const continueButton = document.createElement('button');
+        continueButton.textContent = 'さらにシナリオを見る';
+        continueButton.onclick = () => {
+            simulationCount = 0;
+            const nextScenario = getNextScenario(unhandledScenarios);
+            displayScenario(nextScenario);
+        };
+        document.querySelector('.navigation').appendChild(continueButton);
+        return;
+    }
+    
+    const nextScenario = getNextScenario(unhandledScenarios);
+    displayScenario(nextScenario);
+    simulationCount++;
+}
+
+// ナビゲーションボタンのイベントリスナー
+document.querySelectorAll('.navigation button').forEach(button => {
+    button.addEventListener('click', () => {
+        if (simulationCount < 10) {
+            updateSimulation(selectedItems); // selectedItemsはグローバル変数として存在する前提
+        }
+    });
+});
+
+// 初期表示
+updateSimulation({});

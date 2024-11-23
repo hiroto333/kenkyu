@@ -66,20 +66,60 @@ const items = {
     ]
 };
 
+// 選択されたアイテムを管理するオブジェクト
+// キー: アイテム名, 値: 選択された数量
 let selectedItems = {};
-const maxWeight = 10; // kg
-const maxVolume = 30000; // cm3 (30リットル)
-let currentWeight = 0;
-let currentVolume = 0;
 
+// リュックサックの制限値
+const maxWeight = 10;    // 最大重量 (kg)
+const maxVolume = 30000; // 最大容量 (cm3 = 30L)
+
+// 現在の選択状態を追跡する変数
+let currentWeight = 0;   // 現在の総重量
+let currentVolume = 0;   // 現在の総容量
+
+/**
+ * 現在の状態を保存する関数
+ */
+function saveState() {
+    const state = {
+        selectedItems,
+        currentWeight,
+        currentVolume
+    };
+    localStorage.setItem('backpackState', JSON.stringify(state));
+}
+
+/**
+ * 保存された状態を復元する関数
+ */
+function restoreState() {
+    const savedState = localStorage.getItem('backpackState');
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        selectedItems = state.selectedItems;
+        currentWeight = state.currentWeight;
+        currentVolume = state.currentVolume;
+        updateDisplay();
+    }
+}
+
+/**
+ * アイテムリストをDOM上に作成する関数
+ * 各カテゴリーとアイテムを表示し、数量調整ボタンを追加
+ */
 function createItemList() {
     const itemList = document.getElementById('itemList');
+    
+    // カテゴリごとにアイテムを表示
     for (const [category, categoryItems] of Object.entries(items)) {
         const categoryDiv = document.createElement('div');
         
+        // 各アイテムのHTML要素を作成
         categoryItems.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'item';
+            // アイテムの情報と数量調整ボタンを含むHTML構造を作成
             itemDiv.innerHTML = `
                 <div class="item-info">
                     <div class="item-name">${item.name}</div>
@@ -103,6 +143,11 @@ function createItemList() {
     }
 }
 
+/**
+ * アイテム名から該当するアイテムオブジェクトを検索する関数
+ * @param {string} name - 検索するアイテム名
+ * @returns {Object|null} - 見つかったアイテムオブジェクトまたはnull
+ */
 function findItem(name) {
     for (const category of Object.values(items)) {
         const found = category.find(item => item.name === name);
@@ -111,39 +156,60 @@ function findItem(name) {
     return null;
 }
 
+/**
+ * アイテムの数量を調整する関数
+ * @param {string} itemName - アイテム名
+ * @param {number} change - 増減量（+1 or -1）
+ */
 function adjustQuantity(itemName, change) {
     const item = findItem(itemName);
     if (!item) return;
 
+    // 選択されていないアイテムの初期化
     if (!selectedItems[itemName]) selectedItems[itemName] = 0;
+    
+    // 新しい数量と重量・容量を計算
     const newQuantity = selectedItems[itemName] + change;
     const newWeight = currentWeight + (item.weight * change);
     const newVolume = currentVolume + (item.volume * change);
 
+    // 制限値チェック
     if (newQuantity < 0 || newWeight > maxWeight || newVolume > maxVolume) return;
 
+    // 値を更新
     selectedItems[itemName] = newQuantity;
     currentWeight = newWeight;
     currentVolume = newVolume;
 
+    // 表示を更新
     updateDisplay();
+    saveState(); // 状態を保存
 }
 
+/**
+ * 画面表示を更新する関数
+ * 重量・容量のプログレスバーと選択されたアイテムリストを更新
+ */
 function updateDisplay() {
+    // プログレスバーの要素を取得
     const weightDisplay = document.getElementById('weightDisplay');
     const volumeDisplay = document.getElementById('volumeDisplay');
     const weightProgress = document.getElementById('weightProgress');
     const volumeProgress = document.getElementById('volumeProgress');
     
+    // 重量・容量の表示を更新
     weightDisplay.textContent = `重量： ${currentWeight.toFixed(1)}kg / ${maxWeight}kg`;
     volumeDisplay.textContent = `容量： ${(currentVolume/1000).toFixed(1)}L / ${maxVolume/1000}L`;
     
+    // プログレスバーの割合を計算
     const weightPercentage = (currentWeight / maxWeight) * 100;
     const volumePercentage = (currentVolume / maxVolume) * 100;
     
+    // プログレスバーの幅を更新
     weightProgress.style.width = `${weightPercentage}%`;
     volumeProgress.style.width = `${volumePercentage}%`;
 
+    // プログレスバーの色を更新（警告表示）
     weightProgress.className = 'progress';
     volumeProgress.className = 'progress';
     
@@ -153,12 +219,14 @@ function updateDisplay() {
     if (volumePercentage >= 90) volumeProgress.classList.add('danger');
     else if (volumePercentage >= 70) volumeProgress.classList.add('warning');
 
+    // 各アイテムの数量表示を更新
     document.querySelectorAll('.item').forEach(itemDiv => {
         const itemName = itemDiv.querySelector('.item-name').textContent;
         const quantitySpan = itemDiv.querySelector('.quantity');
         quantitySpan.textContent = selectedItems[itemName] || 0;
     });
 
+    // 選択されたアイテムのリストを更新
     const selectedItemsList = document.getElementById('selectedItems');
     selectedItemsList.innerHTML = '';
     for (const [itemName, quantity] of Object.entries(selectedItems)) {
@@ -173,25 +241,53 @@ function updateDisplay() {
             selectedItemsList.appendChild(li);
         }
     }
-
 }
 
-// リセットボタン機能
+/**
+ * 選択をリセットする関数
+ * 全ての選択状態をクリアし、重量・容量をゼロに戻す
+ */
 function resetSelection() {
     selectedItems = {};  // 選択したアイテムをリセット
     currentWeight = 0;   // 重量をリセット
     currentVolume = 0;   // 容量をリセット
     updateDisplay();     // 画面を更新
+    saveState(); // リセット後の状態を保存
+    // LocalStorageからも完全に削除する場合
+    localStorage.removeItem('backpackState');
 }
 
-// 戻るボタン機能
-function goBack() {
-    const feedback = document.getElementById('feedback');
-    const itemList = document.querySelector('.container');
+// 作成完了ボタンのイベントハンドラ
+function completeSelection() {
+    // 選択が空の場合は警告
+    if (Object.keys(selectedItems).length === 0) {
+        alert('最低1つ以上のアイテムを選択してください。');
+        return;
+    }
+
+    // フィードバックエリアを表示
+    const feedbackContainer = document.getElementById('feedback');
+    feedbackContainer.style.display = 'block';
+
+    // チェックリストエリアを非表示
+    document.querySelector('.checklist').style.display = 'none';
+    saveState(); // 完了時の状態を保存
+}
+
+// シミュレーション開始関数
+function startSimulation() {
+    // 状態を保存
+    saveState();
     
-    // フィードバック画面を非表示にし、メイン画面を再表示
-    feedback.style.display = 'none';
-    itemList.style.display = 'flex';
+    // シミュレーションページに移動
+    window.location.href = 'simulation.html';
 }
 
+// ページ読み込み時に保存された選択情報があれば復元
+window.onload = function() {
+    createItemList();
+    restoreState(); // 保存された状態を復元
+};
+
+// 初期化：アイテムリストを作成
 createItemList();
