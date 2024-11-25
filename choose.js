@@ -278,12 +278,6 @@ firebase.auth().onAuthStateChanged((user) => {
         const fullName = user.displayName || '名前未設定';
         console.log('ユーザーの名前:', fullName);
 
-        // ユーザー名を画面に表示する
-        const userNameDisplay = document.getElementById('userNameDisplay');
-        if (userNameDisplay) {
-            userNameDisplay.textContent = `こんにちは、${fullName} さん！`;
-        }
-
         // Realtime Database に名前を保存（必要な場合）
         const userId = user.uid;
         firebase.database().ref(`users/${userId}/profile`).update({
