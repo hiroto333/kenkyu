@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="ja"></html>
-<html>
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
-    
+
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.8.1/firebase-auth.js"></script>
-  
     <script src="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.js"></script>
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/4.8.1/firebase-ui-auth.css" />
-  </head>
-  <body>
+</head>
+<body>
     <div id="firebaseui-auth-container"></div>
 
     <script>
-      var firebaseConfig = {
-        apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
-        authDomain: "kenkyudb.firebaseapp.com",
-        projectId: "kenkyudb",
-        storageBucket: "kenkyudb.firebasestorage.app",
-        messagingSenderId: "186602532556",
-        appId: "1:186602532556:web:cf6f5a0a870a36332cdc69",
-        measurementId: "G-0WLMS9GGXC"
-      };
-
-      firebase.initializeApp(firebaseConfig);
-
-      var uiConfig = {
-          signInSuccessUrl: 'choose.html',
-          signInOptions: [
-            {
-              provider: firebase.auth.EmailAuthProvider.PROVIDER_ID 
-            }
-          ],
-
-          tosUrl: '/kiyaku.html',           
-          privacyPolicyUrl: '/policy.html'  
+        // Firebaseプロジェクトの設定
+        var firebaseConfig = {
+            apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
+            authDomain: "kenkyudb.firebaseapp.com",
+            projectId: "kenkyudb",
+            storageBucket: "kenkyudb.firebasestorage.app",
+            messagingSenderId: "186602532556",
+            appId: "1:186602532556:web:cf6f5a0a870a36332cdc69",
+            measurementId: "G-0WLMS9GGXC"
         };
-  
+
+        firebase.initializeApp(firebaseConfig);
+
+        // FirebaseUIの設定
+        var uiConfig = {
+            signInSuccessUrl: 'choose.html', // ログイン成功後のリダイレクト先
+            signInOptions: [
+              {
+                provider: firebase.auth.EmailAuthProvider.PROVIDER_ID
+              }
+            ],
+            tosUrl: '/kiyaku.html', // 利用規約
+            privacyPolicyUrl: '/policy.html', // プライバシーポリシー
+        };
+
+        // FirebaseUIインスタンスを初期化
         var ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+        // UIを開始
         ui.start('#firebaseui-auth-container', uiConfig);
-  </script>
-  </body>
+    </script>
+</body>
 </html>

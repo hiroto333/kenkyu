@@ -66,6 +66,18 @@ const items = {
     ]
 };
 
+var firebaseConfig = {
+    apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
+    authDomain: "kenkyudb.firebaseapp.com",
+    projectId: "kenkyudb",
+    storageBucket: "kenkyudb.firebasestorage.app",
+    messagingSenderId: "186602532556",
+    appId: "1:186602532556:web:cf6f5a0a870a36332cdc69",
+    measurementId: "G-0WLMS9GGXC"
+};
+
+firebase.initializeApp(firebaseConfig);
+
 // 選択されたアイテムを管理するオブジェクト
 // キー: アイテム名, 値: 選択された数量
 let selectedItems = {};
@@ -257,6 +269,38 @@ function resetSelection() {
     localStorage.removeItem('backpackState');
 }
 
+// ページ読み込み時にログイン状態を監視
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log('ログイン中のユーザー:', user.email);
+        
+        // ユーザーのフルネームを取得
+        const fullName = user.displayName || '名前未設定';
+        console.log('ユーザーの名前:', fullName);
+
+        // ユーザー名を画面に表示する
+        const userNameDisplay = document.getElementById('userNameDisplay');
+        if (userNameDisplay) {
+            userNameDisplay.textContent = `こんにちは、${fullName} さん！`;
+        }
+
+        // Realtime Database に名前を保存（必要な場合）
+        const userId = user.uid;
+        firebase.database().ref(`users/${userId}/profile`).update({
+            name: fullName,
+            email: user.email
+        }).then(() => {
+            console.log('ユーザー名が保存されました');
+        }).catch((error) => {
+            console.error('ユーザー名保存中にエラーが発生しました:', error);
+        });
+    } else {
+        console.log('ユーザーがログインしていません');
+        alert('ログインが必要です。ログイン画面に移動します。');
+        window.location.href = 'login.html'; // ログイン画面にリダイレクト
+    }
+});
+
 // 作成完了ボタンのイベントハンドラ
 function completeSelection() {
     // 選択が空の場合は警告
@@ -265,13 +309,34 @@ function completeSelection() {
         return;
     }
 
-    // フィードバックエリアを表示
-    const feedbackContainer = document.getElementById('feedback');
-    feedbackContainer.style.display = 'block';
+    const user = firebase.auth().currentUser;
 
-    // チェックリストエリアを非表示
-    document.querySelector('.checklist').style.display = 'none';
-    saveState(); // 完了時の状態を保存
+    if (!user) {
+        alert('ログインが必要です。');
+        return;
+    }
+
+    const userId = user.uid; // ユーザーのUIDを取得
+
+    // Firebase Realtime Databaseにデータを保存
+    firebase.database().ref(`users/${userId}/selectedItems`).set({
+        items: selectedItems,
+        totalWeight: currentWeight,
+        totalVolume: currentVolume,
+        timestamp: new Date().toISOString()
+    }).then(() => {
+        alert('データが正常に保存されました！');
+        // フィードバックエリアを表示
+        const feedbackContainer = document.getElementById('feedback');
+        feedbackContainer.style.display = 'block';
+
+        // チェックリストエリアを非表示
+        document.querySelector('.checklist').style.display = 'none';
+        saveState(); // 完了時の状態を保存
+    }).catch((error) => {
+        console.error('データ保存中にエラーが発生しました:', error);
+        alert('データ保存に失敗しました。');
+    });
 }
 
 // シミュレーション開始関数
