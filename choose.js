@@ -8,6 +8,7 @@ const items = {
         { name: "雨具", weight: 0.3, volume: 500, explanation: "携帯用のポンチョタイプが場所を取らず便利。", unit: "着", dimensions: "20×15×2cm" },
         { name: "携帯ラジオ", weight: 0.2, volume: 250, explanation: "災害情報の入手に必須。手回し充電タイプが推奨。", unit: "台", dimensions: "10×5×5cm" },
         { name: "モバイルバッテリー", weight: 0.3, volume: 200, explanation: "スマートフォンの充電用。容量10000mAh程度が適当。", unit: "個", dimensions: "10×6×2cm" },
+        { name: "簡易トイレ", weight: 0.1, volume: 200, explanation: "簡易的なトイレ。自分に必要な分必要。", unit: "個", dimensions: "25×15×1cm" },
         { name: "ライター", weight: 0.05, volume: 50, explanation: "火起こしや照明用。防水マッチと併用がおすすめ。", unit: "個", dimensions: "8×2×1cm" },
         { name: "マッチ", weight: 0.05, volume: 30, explanation: "防水タイプが望ましい。ライターのバックアップとして。", unit: "箱", dimensions: "5×3×2cm" },
         { name: "ろうそく", weight: 0.1, volume: 100, explanation: "長時間の照明として。火災に注意。", unit: "本", dimensions: "10×2×2cm" },
@@ -16,20 +17,24 @@ const items = {
     ],
     "食料と水": [
         { name: "飲料水(500ml)", weight: 0.5, volume: 500, explanation: "1人1日3リットルが目安。必要最小限でも500ml×3本。", unit: "本", dimensions: "21×7×7cm" },
-        { name: "非常食", weight: 0.2, volume: 400, explanation: "3食分以上。賞味期限の長いもの。缶詰やレトルト食品。", unit: "食", dimensions: "15×10×3cm" },
+        { name: "非常食(一食)", weight: 0.2, volume: 400, explanation: "3食分以上。賞味期限の長いもの。缶詰やレトルト食品。", unit: "食", dimensions: "15×10×3cm" },
         { name: "缶切り", weight: 0.1, volume: 50, explanation: "缶詰を開けるため。プルトップ式でない缶詰がある場合に必要。", unit: "個", dimensions: "10×5×1cm" }
     ],
     "衣類・防寒": [
         { name: "毛布", weight: 0.8, volume: 3000, explanation: "防寒、睡眠用。アルミブランケットは軽量で代用可。", unit: "枚", dimensions: "30×20×5cm" },
         { name: "衣類", weight: 0.5, volume: 2000, explanation: "下着を含む着替え一式。速乾性の素材が望ましい。", unit: "組", dimensions: "25×20×4cm" },
-        { name: "レジャーシート", weight: 0.2, volume: 300, explanation: "地面に敷いて使用。断熱効果もある。", unit: "枚", dimensions: "15×10×2cm" }
+        { name: "レジャーシート", weight: 0.2, volume: 300, explanation: "地面に敷いて使用。断熱効果もある。", unit: "枚", dimensions: "15×10×2cm" },
+        { name: "使い捨てカイロ", weight: 0.1, volume: 100, explanation: "使い捨てられるカイロ。", unit: "枚", dimensions: "10×10×10cm" },
+        { name: "アルミシート", weight: 0.2, volume: 800, explanation: "体に巻くと保温できる。", unit: "個", dimensions: "10×10×10cm" }
     ],
     "衛生用品": [
         { name: "トイレットペーパー", weight: 0.2, volume: 1000, explanation: "必要最小限の量を持参。圧縮タイプが便利。", unit: "巻", dimensions: "10×10×10cm" },
         { name: "ティッシュペーパー", weight: 0.1, volume: 400, explanation: "小包装のものが便利。様々な用途に使用可能。", unit: "箱", dimensions: "12×6×6cm" },
         { name: "ウェットティッシュ", weight: 0.2, volume: 500, explanation: "清潔保持に。除菌タイプが望ましい。", unit: "パック", dimensions: "15×10×3cm" },
         { name: "歯ブラシセット", weight: 0.1, volume: 200, explanation: "歯磨き粉、洗口液含む。衛生管理に重要。", unit: "セット", dimensions: "20×5×2cm" },
-        { name: "タオル", weight: 0.2, volume: 500, explanation: "清潔なタオル。多目的に使用可能。", unit: "枚", dimensions: "25×12×2cm" }
+        { name: "タオル", weight: 0.2, volume: 500, explanation: "清潔なタオル。多目的に使用可能。", unit: "枚", dimensions: "25×12×2cm" },
+        { name: "石鹸", weight: 0.2, volume: 500, explanation: "手洗い用。清潔保持に。", unit: "個", dimensions: "25×12×2cm" },
+        { name: "ドライシャンプー", weight: 0.2, volume: 500, explanation: "お風呂に入れない時用。清潔保持に。", unit: "個", dimensions: "25×12×2cm" },
     ],
     "救急・医療": [
         { name: "救急箱", weight: 0.5, volume: 2000, explanation: "基本的な救急用品一式。常備薬も含める。", unit: "セット", dimensions: "20×15×7cm" },
@@ -41,7 +46,12 @@ const items = {
         { name: "布製ガムテープ", weight: 0.2, volume: 300, explanation: "多用途に使える。補修や固定に便利。", unit: "巻", dimensions: "10×10×3cm" },
         { name: "ポリ袋", weight: 0.1, volume: 200, explanation: "ゴミ袋としても、防水袋としても使用可能。", unit: "組", dimensions: "20×15×1cm" },
         { name: "筆記用具", weight: 0.1, volume: 100, explanation: "メモを取るため。油性ペンがあると便利。", unit: "セット", dimensions: "15×5×1cm" },
-        { name: "ロープ", weight: 0.3, volume: 500, explanation: "荷物の固定や応急措置に。パラコードが軽量で丈夫。", unit: "巻", dimensions: "15×15×3cm" }
+        { name: "避難地図", weight: 0.1, volume: 100, explanation: "周辺の避難地図。あると便利。", unit: "枚", dimensions: "15×5×1cm" },
+        { name: "ロープ", weight: 0.3, volume: 500, explanation: "荷物の固定や応急措置に。パラコードが軽量で丈夫。", unit: "巻", dimensions: "15×15×3cm" },
+        { name: "電池", weight: 0.08, volume: 50, explanation: "予備の電池。", unit: "個", dimensions: "8×2×1cm" },
+        { name: "ラップ", weight: 0.08, volume: 50, explanation: "食器に覆って使うと，節水に。止血もできる．", unit: "個", dimensions: "8×2×1cm" },
+        { name: "安眠グッズ（耳栓・アイマスク）", weight: 0.08, volume: 50, explanation: "騒音対策に。寝れない人向け。", unit: "個", dimensions: "8×2×1cm" },    
+        { name: "トランプ", weight: 0.08, volume: 50, explanation: "暇な避難所生活に。", unit: "個", dimensions: "8×2×1cm" } 
     ],
     "貴重品": [
         { name: "現金", weight: 0.1, volume: 50, explanation: "小銭を含む現金。ATMが使えない状況を想定。", unit: "セット", dimensions: "10×7×1cm" },
@@ -53,55 +63,63 @@ const items = {
         { name: "コンタクトレンズ", weight: 0.05, volume: 100, explanation: "使用者は予備を持参。ケア用品も忘れずに。", unit: "セット", dimensions: "8×4×3cm" },
         { name: "お薬手帳", weight: 0.05, volume: 30, explanation: "持病のある方は必須。薬の情報確認用。", unit: "冊", dimensions: "15×9×0.5cm" },
         { name: "鍵", weight: 0.05, volume: 20, explanation: "家や車の鍵。予備があれば持参。", unit: "セット", dimensions: "5×3×1cm" }
-    ],
-    "赤ちゃん用品": [
-        { name: "哺乳瓶", weight: 0.2, volume: 300, explanation: "清潔なものを複数用意。", unit: "本", dimensions: "15×7×7cm" },
-        { name: "粉ミルク", weight: 0.3, volume: 500, explanation: "携帯用の小分けパックが便利。", unit: "回分", dimensions: "15×10×3cm" },
-        { name: "離乳食", weight: 0.2, volume: 400, explanation: "月齢に応じたものを用意。", unit: "食", dimensions: "12×8×4cm" },
-        { name: "おやつ", weight: 0.1, volume: 200, explanation: "食べ慣れたものを少量。", unit: "個", dimensions: "10×7×3cm" },
-        { name: "スプーン", weight: 0.05, volume: 30, explanation: "離乳食用。プラスチック製が軽量。", unit: "本", dimensions: "12×3×1cm" },
-        { name: "洗浄綿", weight: 0.1, volume: 200, explanation: "衛生管理用。少し多めに用意。", unit: "包", dimensions: "12×8×2cm" },
-        { name: "紙おむつ", weight: 0.5, volume: 1500, explanation: "1日分以上。サイズに注意。", unit: "枚", dimensions: "25×15×4cm" },
-        { name: "おしりふき", weight: 0.2, volume: 400, explanation: "おむつ替え用。たっぷり使うので多めに。", unit: "パック", dimensions: "15×10×3cm" },
-        { name: "おんぶひも", weight: 0.3, volume: 800, explanation: "両手が使えるタイプが便利。", unit: "個", dimensions: "25×20×2cm" },
-        { name: "玩具", weight: 0.1, volume: 200, explanation: "お気に入りの小さなもの。", unit: "個", dimensions: "10×10×2cm" },
-        { name: "母子手帳", weight: 0.1, volume: 30, explanation: "予防接種歴などの確認用。", unit: "冊", dimensions: "15×9×0.5cm" },
-        { name: "ベビーカー", weight: 3.0, volume: 20000, explanation: "避難時の移動用。折りたたみタイプが望ましい。", unit: "台", dimensions: "80×50×20cm" }
-    ],
-    "高齢者用品": [
-        { name: "高齢者手帳", weight: 0.1, volume: 30, explanation: "介護保険証や医療情報を確認するため。", unit: "冊", dimensions: "15×9×0.5cm" },
-        { name: "予備メガネ", weight: 0.1, volume: 200, explanation: "普段使用している方は必須。ケース付きで。", unit: "組", dimensions: "15×6×3cm" },
-        { name: "おむつ", weight: 0.5, volume: 1000, explanation: "必要な方は1日分以上。", unit: "枚", dimensions: "25×15×4cm" },
-        { name: "看護用品", weight: 0.3, volume: 1500, explanation: "必要に応じて。かかりつけ医に相談を。", unit: "セット", dimensions: "20×15×7cm" },
-        { name: "持病薬", weight: 0.2, volume: 300, explanation: "常用している薬。必要な量を持参。", unit: "セット", dimensions: "15×10×3cm" },
-        { name: "おしりふき", weight: 0.2, volume: 400, explanation: "清潔保持に。", unit: "パック", dimensions: "15×10×3cm" },
-        { name: "補聴器", weight: 0.1, volume: 100, explanation: "必要な方は忘れずに。予備の電池も持参。", unit: "セット", dimensions: "8×5×3cm" },
-        { name: "杖", weight: 0.3, volume: 800, explanation: "歩行が不安定な方に。折りたたみ式が便利。", unit: "本", dimensions: "90×3×3cm" }
-    ],
-    "女性用品": [
-        { name: "生理用品", weight: 0.1, volume: 500, explanation: "避難所での必需品。十分な量を用意。", unit: "パック", dimensions: "20×12×5cm" },
-        { name: "サニタリーショーツ", weight: 0.1, volume: 200, explanation: "生理時に使用。速乾性のものが望ましい。", unit: "枚", dimensions: "20×15×1cm" },
-        { name: "防災ブザー", weight: 0.05, volume: 50, explanation: "緊急時に助けを呼ぶために。ホイッスルと併用も可能。", unit: "個", dimensions: "8×4×2cm" },
-        { name: "中身の見えないゴミ袋", weight: 0.1, volume: 200, explanation: "プライバシーを守るために使用。", unit: "組", dimensions: "20×15×1cm" }
     ]
 };
 
+// 選択されたアイテムを管理するオブジェクト
+// キー: アイテム名, 値: 選択された数量
 let selectedItems = {};
-const maxWeight = 10; // kg
-const maxVolume = 20000; // cm3 (30リットル)
-let currentWeight = 0;
-let currentVolume = 0;
 
+// リュックサックの制限値
+const maxWeight = 10;    // 最大重量 (kg)
+const maxVolume = 30000; // 最大容量 (cm3 = 30L)
+
+// 現在の選択状態を追跡する変数
+let currentWeight = 0;   // 現在の総重量
+let currentVolume = 0;   // 現在の総容量
+
+/**
+ * 現在の状態を保存する関数
+ */
+function saveState() {
+    const state = {
+        selectedItems,
+        currentWeight,
+        currentVolume
+    };
+    localStorage.setItem('backpackState', JSON.stringify(state));
+}
+
+/**
+ * 保存された状態を復元する関数
+ */
+function restoreState() {
+    const savedState = localStorage.getItem('backpackState');
+    if (savedState) {
+        const state = JSON.parse(savedState);
+        selectedItems = state.selectedItems;
+        currentWeight = state.currentWeight;
+        currentVolume = state.currentVolume;
+        updateDisplay();
+    }
+}
+
+/**
+ * アイテムリストをDOM上に作成する関数
+ * 各カテゴリーとアイテムを表示し、数量調整ボタンを追加
+ */
 function createItemList() {
     const itemList = document.getElementById('itemList');
+    
+    // カテゴリごとにアイテムを表示
     for (const [category, categoryItems] of Object.entries(items)) {
         const categoryDiv = document.createElement('div');
-        categoryDiv.className = 'category';
-        categoryDiv.innerHTML = `<h2>${category}</h2>`;
         
+        // 各アイテムのHTML要素を作成
         categoryItems.forEach(item => {
             const itemDiv = document.createElement('div');
             itemDiv.className = 'item';
+            // アイテムの情報と数量調整ボタンを含むHTML構造を作成
             itemDiv.innerHTML = `
                 <div class="item-info">
                     <div class="item-name">${item.name}</div>
@@ -125,6 +143,11 @@ function createItemList() {
     }
 }
 
+/**
+ * アイテム名から該当するアイテムオブジェクトを検索する関数
+ * @param {string} name - 検索するアイテム名
+ * @returns {Object|null} - 見つかったアイテムオブジェクトまたはnull
+ */
 function findItem(name) {
     for (const category of Object.values(items)) {
         const found = category.find(item => item.name === name);
@@ -133,39 +156,60 @@ function findItem(name) {
     return null;
 }
 
+/**
+ * アイテムの数量を調整する関数
+ * @param {string} itemName - アイテム名
+ * @param {number} change - 増減量（+1 or -1）
+ */
 function adjustQuantity(itemName, change) {
     const item = findItem(itemName);
     if (!item) return;
 
+    // 選択されていないアイテムの初期化
     if (!selectedItems[itemName]) selectedItems[itemName] = 0;
+    
+    // 新しい数量と重量・容量を計算
     const newQuantity = selectedItems[itemName] + change;
     const newWeight = currentWeight + (item.weight * change);
     const newVolume = currentVolume + (item.volume * change);
 
+    // 制限値チェック
     if (newQuantity < 0 || newWeight > maxWeight || newVolume > maxVolume) return;
 
+    // 値を更新
     selectedItems[itemName] = newQuantity;
     currentWeight = newWeight;
     currentVolume = newVolume;
 
+    // 表示を更新
     updateDisplay();
+    saveState(); // 状態を保存
 }
 
+/**
+ * 画面表示を更新する関数
+ * 重量・容量のプログレスバーと選択されたアイテムリストを更新
+ */
 function updateDisplay() {
+    // プログレスバーの要素を取得
     const weightDisplay = document.getElementById('weightDisplay');
     const volumeDisplay = document.getElementById('volumeDisplay');
     const weightProgress = document.getElementById('weightProgress');
     const volumeProgress = document.getElementById('volumeProgress');
     
+    // 重量・容量の表示を更新
     weightDisplay.textContent = `重量： ${currentWeight.toFixed(1)}kg / ${maxWeight}kg`;
     volumeDisplay.textContent = `容量： ${(currentVolume/1000).toFixed(1)}L / ${maxVolume/1000}L`;
     
+    // プログレスバーの割合を計算
     const weightPercentage = (currentWeight / maxWeight) * 100;
     const volumePercentage = (currentVolume / maxVolume) * 100;
     
+    // プログレスバーの幅を更新
     weightProgress.style.width = `${weightPercentage}%`;
     volumeProgress.style.width = `${volumePercentage}%`;
 
+    // プログレスバーの色を更新（警告表示）
     weightProgress.className = 'progress';
     volumeProgress.className = 'progress';
     
@@ -175,12 +219,14 @@ function updateDisplay() {
     if (volumePercentage >= 90) volumeProgress.classList.add('danger');
     else if (volumePercentage >= 70) volumeProgress.classList.add('warning');
 
+    // 各アイテムの数量表示を更新
     document.querySelectorAll('.item').forEach(itemDiv => {
         const itemName = itemDiv.querySelector('.item-name').textContent;
         const quantitySpan = itemDiv.querySelector('.quantity');
         quantitySpan.textContent = selectedItems[itemName] || 0;
     });
 
+    // 選択されたアイテムのリストを更新
     const selectedItemsList = document.getElementById('selectedItems');
     selectedItemsList.innerHTML = '';
     for (const [itemName, quantity] of Object.entries(selectedItems)) {
@@ -195,256 +241,53 @@ function updateDisplay() {
             selectedItemsList.appendChild(li);
         }
     }
-
 }
 
-// リセットボタン機能
+/**
+ * 選択をリセットする関数
+ * 全ての選択状態をクリアし、重量・容量をゼロに戻す
+ */
 function resetSelection() {
     selectedItems = {};  // 選択したアイテムをリセット
     currentWeight = 0;   // 重量をリセット
     currentVolume = 0;   // 容量をリセット
     updateDisplay();     // 画面を更新
+    saveState(); // リセット後の状態を保存
+    // LocalStorageからも完全に削除する場合
+    localStorage.removeItem('backpackState');
 }
 
+// 作成完了ボタンのイベントハンドラ
+function completeSelection() {
+    // 選択が空の場合は警告
+    if (Object.keys(selectedItems).length === 0) {
+        alert('最低1つ以上のアイテムを選択してください。');
+        return;
+    }
 
-// 作成完了ボタン機能
+    // フィードバックエリアを表示
+    const feedbackContainer = document.getElementById('feedback');
+    feedbackContainer.style.display = 'block';
+
+    // チェックリストエリアを非表示
+    document.querySelector('.checklist').style.display = 'none';
+    saveState(); // 完了時の状態を保存
+}
+
+// シミュレーション開始関数
 function startSimulation() {
-    const feedback = document.getElementById('feedback');
-    const itemList = document.querySelector('.container');
-    const advice = document.getElementById('advice');
-
-    // フィードバックの例
-    let adviceText = "<p>非常持ち出し袋の内容:</p>";
-
-     // 基本アイテム
-     if (!selectedItems["懐中電灯"] || selectedItems["懐中電灯"] < 1) {
-        adviceText += "<p>懐中電灯がなく、暗闇で移動するのが非常に困難です。障害物にぶつかったり怪我をする危険があります。</p>";
-    }
-    if (!selectedItems["簡易ヘルメット"] || selectedItems["簡易ヘルメット"] < 1) {
-        adviceText += "<p>簡易ヘルメットがないため、落下物から頭を守れません。負傷のリスクが高まります。</p>";
-    }
-    if (!selectedItems["防災ずきん"] || selectedItems["防災ずきん"] < 1) {
-        adviceText += "<p>防災ずきんがなく、頭部の保護ができません。特に子供にとって危険です。</p>";
-    }
-    if (!selectedItems["ホイッスル"] || selectedItems["ホイッスル"] < 1) {
-        adviceText += "<p>ホイッスルがなく、救助を求める際に大きな声を出さなければなりません。声が届かない場合があります。</p>";
-    }
-    if (!selectedItems["紐なしのズック靴"] || selectedItems["紐なしのズック靴"] < 1) {
-        adviceText += "<p>靴がないため、足がガラスの破片やがれきで怪我をする可能性があります。</p>";
-    }
-    if (!selectedItems["雨具"] || selectedItems["雨具"] < 1) {
-        adviceText += "<p>雨具がないため、大雨に濡れ、体温が低下して体調を崩す可能性があります。</p>";
-    }
-    if (!selectedItems["携帯ラジオ"] || selectedItems["携帯ラジオ"] < 1) {
-        adviceText += "<p>携帯ラジオがなく、最新の災害情報が得られません。状況判断が難しくなります。</p>";
-    }
-    if (!selectedItems["モバイルバッテリー"] || selectedItems["モバイルバッテリー"] < 1) {
-        adviceText += "<p>モバイルバッテリーがないため、スマートフォンを充電できず、連絡手段が絶たれる恐れがあります。</p>";
-    }
-    if (!selectedItems["ライター"] || selectedItems["ライター"] < 1) {
-        adviceText += "<p>ライターがなく、火を起こせず暖を取ったり食事を温めたりすることができません。</p>";
-    }
-    if (!selectedItems["マッチ"] || selectedItems["マッチ"] < 1) {
-        adviceText += "<p>マッチがなく、ライターが故障した場合のバックアップがありません。</p>";
-    }
-    if (!selectedItems["ろうそく"] || selectedItems["ろうそく"] < 1) {
-        adviceText += "<p>ろうそくがなく、長時間の停電時に明かりを確保できません。</p>";
-    }
-    if (!selectedItems["ナイフ"] || selectedItems["ナイフ"] < 1) {
-        adviceText += "<p>ナイフがないため、緊急時に物を切ったり、調理ができなかったりします。</p>";
-    }
-    if (!selectedItems["軍手"] || selectedItems["軍手"] < 1) {
-        adviceText += "<p>軍手がなく、がれきを安全に移動させたり手を保護することができません。</p>";
-    }
-
-    // 食料と水
-    if (!selectedItems["飲料水(500ml)"] || selectedItems["飲料水(500ml)"] < 3) {
-        adviceText += "<p>飲料水が不足しており、1日以上持たない可能性があります。脱水症状のリスクがあります。</p>";
-    }
-    if (!selectedItems["非常食"] || selectedItems["非常食"] < 3) {
-        adviceText += "<p>非常食が足りないため、十分な栄養を取ることができません。体力が低下します。</p>";
-    }
-    if (!selectedItems["缶切り"] || selectedItems["缶切り"] < 1) {
-        adviceText += "<p>缶切りがなく、缶詰の非常食を開けることができません。</p>";
-    }
-
-    // 衣類・防寒
-    if (!selectedItems["毛布"] || selectedItems["毛布"] < 1) {
-        adviceText += "<p>毛布がなく、寒さを防げません。体温が低下しやすくなります。</p>";
-    }
-    if (!selectedItems["衣類"] || selectedItems["衣類"] < 1) {
-        adviceText += "<p>衣類がないため、着替えができず、衛生状態が悪化する可能性があります。</p>";
-    }
-    if (!selectedItems["レジャーシート"] || selectedItems["レジャーシート"] < 1) {
-        adviceText += "<p>レジャーシートがなく、地面に直接座らなければなりません。冷気や湿気を防げません。</p>";
-    }
-
-    // 衛生用品
-    if (!selectedItems["トイレットペーパー"] || selectedItems["トイレットペーパー"] < 1) {
-        adviceText += "<p>トイレットペーパーがなく、衛生状態を保つのが困難です。</p>";
-    }
-    if (!selectedItems["ティッシュペーパー"] || selectedItems["ティッシュペーパー"] < 1) {
-        adviceText += "<p>ティッシュペーパーがないため、必要なときに清潔にできません。</p>";
-    }
-    if (!selectedItems["ウェットティッシュ"] || selectedItems["ウェットティッシュ"] < 1) {
-        adviceText += "<p>ウェットティッシュがなく、手を清潔に保つことができません。感染症のリスクが高まります。</p>";
-    }
-    if (!selectedItems["歯ブラシセット"] || selectedItems["歯ブラシセット"] < 1) {
-        adviceText += "<p>歯ブラシセットがなく、口腔衛生が悪化する可能性があります。</p>";
-    }
-    if (!selectedItems["タオル"] || selectedItems["タオル"] < 1) {
-        adviceText += "<p>タオルがなく、汗や水分を拭くことができず、不快な状態になります。</p>";
-    }
-
-    // 救急・医療
-    if (!selectedItems["救急箱"] || selectedItems["救急箱"] < 1) {
-        adviceText += "<p>救急箱がなく、怪我や病気の応急処置ができません。</p>";
-    }
-    if (!selectedItems["マスク"] || selectedItems["マスク"] < 1) {
-        adviceText += "<p>マスクがなく、感染症や粉塵から守れません。</p>";
-    }
-    if (!selectedItems["アルコール消毒"] || selectedItems["アルコール消毒"] < 1) {
-        adviceText += "<p>アルコール消毒がなく、手を消毒できません。感染のリスクがあります。</p>";
-    }
-    if (!selectedItems["体温計"] || selectedItems["体温計"] < 1) {
-        adviceText += "<p>体温計がなく、体調の変化に気づくことが遅れる可能性があります。</p>";
-    }
-
-    // 工具・その他
-    if (!selectedItems["布製ガムテープ"] || selectedItems["布製ガムテープ"] < 1) {
-        adviceText += "<p>布製ガムテープがなく、応急修理ができません。</p>";
-    }
-    if (!selectedItems["ポリ袋"] || selectedItems["ポリ袋"] < 1) {
-        adviceText += "<p>ポリ袋がなく、ゴミや汚物を処理するのが困難です。</p>";
-    }
-    if (!selectedItems["筆記用具"] || selectedItems["筆記用具"] < 1) {
-        adviceText += "<p>筆記用具がなく、メモを取ったり、必要な情報を書き留めたりすることができません。</p>"; 
-    }
-    if (!selectedItems["ロープ"] || selectedItems["ロープ"] < 1) {
-        adviceText += "<p>ロープがなく、荷物を固定したり、応急的に使用したりすることができません。</p>";
-    }
-    // 貴重品
-    if (!selectedItems["現金"] || selectedItems["現金"] < 1) {
-        adviceText += "<p>現金がなく、停電時に電子決済が使えない場合、物を購入することができません。</p>";
-    }
-    if (!selectedItems["預貯金通帳"] || selectedItems["預貯金通帳"] < 1) {
-        adviceText += "<p>預貯金通帳がなく、本人確認が必要なときに不便です。</p>";
-    }
-    if (!selectedItems["健康保険証"] || selectedItems["健康保険証"] < 1) {
-        adviceText += "<p>健康保険証がなく、病院で治療を受ける際に不便が生じます。</p>";
-    }
-    if (!selectedItems["運転免許証"] || selectedItems["運転免許証"] < 1) {
-        adviceText += "<p>運転免許証がなく、身分証明が必要な場面で困ることがあります。</p>";
-    }
-    if (!selectedItems["パスポート"] || selectedItems["パスポート"] < 1) {
-        adviceText += "<p>パスポートがなく、海外避難が必要な場合に大変不便です。</p>";
-    }
-    if (!selectedItems["印鑑"] || selectedItems["印鑑"] < 1) {
-        adviceText += "<p>印鑑がなく、重要な手続きがスムーズに進まない場合があります。</p>";
-    }
-    if (!selectedItems["コンタクトレンズ"] || selectedItems["コンタクトレンズ"] < 1) {
-        adviceText += "<p>コンタクトレンズがなく、視力が悪い人は見えにくい状態が続いてしまいます。</p>";
-    }
-    if (!selectedItems["お薬手帳"] || selectedItems["お薬手帳"] < 1) {
-        adviceText += "<p>お薬手帳がなく、持病のある人は薬の情報を適切に管理できません。</p>";
-    }
-    if (!selectedItems["鍵"] || selectedItems["鍵"] < 1) {
-        adviceText += "<p>鍵がなく、家や車に入ることができません。</p>";
-    }
-
-    // 赤ちゃん用品
-    if (!selectedItems["哺乳瓶"] || selectedItems["哺乳瓶"] < 1) {
-        adviceText += "<p>哺乳瓶がなく、赤ちゃんにミルクをあげることができません。</p>";
-    }
-    if (!selectedItems["粉ミルク"] || selectedItems["粉ミルク"] < 1) {
-        adviceText += "<p>粉ミルクがなく、赤ちゃんが空腹になってしまいます。</p>";
-    }
-    if (!selectedItems["離乳食"] || selectedItems["離乳食"] < 1) {
-        adviceText += "<p>離乳食がなく、月齢に合った食事を用意できません。</p>";
-    }
-    if (!selectedItems["おやつ"] || selectedItems["おやつ"] < 1) {
-        adviceText += "<p>おやつがなく、赤ちゃんの機嫌を保つのが難しくなります。</p>";
-    }
-    if (!selectedItems["スプーン"] || selectedItems["スプーン"] < 1) {
-        adviceText += "<p>スプーンがなく、赤ちゃんに離乳食を与えるのが難しくなります。</p>";
-    }
-    if (!selectedItems["洗浄綿"] || selectedItems["洗浄綿"] < 1) {
-        adviceText += "<p>洗浄綿がなく、赤ちゃんの衛生を保てません。</p>";
-    }
-    if (!selectedItems["紙おむつ"] || selectedItems["紙おむつ"] < 1) {
-        adviceText += "<p>紙おむつがなく、赤ちゃんのおむつ替えができません。</p>";
-    }
-    if (!selectedItems["おしりふき"] || selectedItems["おしりふき"] < 1) {
-        adviceText += "<p>おしりふきがなく、おむつ替えの際に不便です。</p>";
-    }
-    if (!selectedItems["おんぶひも"] || selectedItems["おんぶひも"] < 1) {
-        adviceText += "<p>おんぶひもがなく、両手を空けて赤ちゃんを抱っこすることができません。</p>";
-    }
-    if (!selectedItems["玩具"] || selectedItems["玩具"] < 1) {
-        adviceText += "<p>玩具がなく、赤ちゃんの気を引くものがないため、ぐずりやすくなります。</p>";
-    }
-    if (!selectedItems["母子手帳"] || selectedItems["母子手帳"] < 1) {
-        adviceText += "<p>母子手帳がなく、赤ちゃんの予防接種歴などの情報を確認できません。</p>";
-    }
-    if (!selectedItems["ベビーカー"] || selectedItems["ベビーカー"] < 1) {
-        adviceText += "<p>ベビーカーがなく、赤ちゃんを長時間抱っこして移動するのが大変です。</p>";
-    }
-
-    // 高齢者用品
-    if (!selectedItems["高齢者手帳"] || selectedItems["高齢者手帳"] < 1) {
-        adviceText += "<p>高齢者手帳がなく、医療情報や保険情報が確認できません。</p>";
-    }
-    if (!selectedItems["予備メガネ"] || selectedItems["予備メガネ"] < 1) {
-        adviceText += "<p>予備メガネがなく、視力が悪い高齢者は見えにくくなります。</p>";
-    }
-    if (!selectedItems["おむつ"] || selectedItems["おむつ"] < 1) {
-        adviceText += "<p>おむつがなく、高齢者が快適に過ごせない可能性があります。</p>";
-    }
-    if (!selectedItems["看護用品"] || selectedItems["看護用品"] < 1) {
-        adviceText += "<p>看護用品がなく、必要なケアを行うことができません。</p>";
-    }
-    if (!selectedItems["持病薬"] || selectedItems["持病薬"] < 1) {
-        adviceText += "<p>持病薬がなく、健康状態が悪化する危険があります。</p>";
-    }
-    if (!selectedItems["おしりふき"] || selectedItems["おしりふき"] < 1) {
-        adviceText += "<p>おしりふきがなく、清潔保持が困難です。</p>";
-    }
-    if (!selectedItems["補聴器"] || selectedItems["補聴器"] < 1) {
-        adviceText += "<p>補聴器がなく、高齢者がコミュニケーションを取れません。</p>";
-    }
-    if (!selectedItems["杖"] || selectedItems["杖"] < 1) {
-        adviceText += "<p>杖がなく、歩行が不安定な高齢者が転倒するリスクがあります。</p>";
-    }
-
-    // 女性用品
-    if (!selectedItems["生理用品"] || selectedItems["生理用品"] < 1) {
-        adviceText += "<p>生理用品がなく、避難所での衛生管理が困難です。</p>";
-    }
-    if (!selectedItems["サニタリーショーツ"] || selectedItems["サニタリーショーツ"] < 1) {
-        adviceText += "<p>サニタリーショーツがなく、快適に過ごすのが難しくなります。</p>";
-    }
-    if (!selectedItems["防災ブザー"] || selectedItems["防災ブザー"] < 1) {
-        adviceText += "<p>防災ブザーがなく、緊急時に助けを呼ぶ手段が限られます。</p>";
-    }
-    if (!selectedItems["中身の見えないゴミ袋"] || selectedItems["中身の見えないゴミ袋"] < 1) {
-        adviceText += "<p>中身の見えないゴミ袋がなく、プライバシーを守ることが難しくなります。</p>";
-    }
-
-    advice.innerHTML = adviceText;
-
-    // メイン画面を非表示にし、フィードバック画面を表示
-    itemList.style.display = 'none';
-    feedback.style.display = 'block';
-}
-
-// 戻るボタン機能
-function goBack() {
-    const feedback = document.getElementById('feedback');
-    const itemList = document.querySelector('.container');
+    // 状態を保存
+    saveState();
     
-    // フィードバック画面を非表示にし、メイン画面を再表示
-    feedback.style.display = 'none';
-    itemList.style.display = 'flex';
+    // シミュレーションページに移動
+    window.location.href = 'simulation.html';
 }
 
+// ページ読み込み時に保存された選択情報があれば復元
+window.onload = function() {
+    createItemList();
+    restoreState(); // 保存された状態を復元
+};
+
+// 初期化：アイテムリストを作成
 createItemList();
