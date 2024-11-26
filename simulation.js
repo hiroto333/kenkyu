@@ -11,14 +11,14 @@ const scenarios = [
         title: "道路損壊",
         description: "地震で道路が損壊し、避難所までの道のりが普段より遠回りに。",
         requiredItems: ["紐なしのズック靴"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "長距離歩行による疲労と脱水のリスクがあります。"
     },
     {
         title: "寒波到来",
         description: "避難所に向かう途中、急激な気温低下が発生。",
         requiredItems: ["毛布", "使い捨てカイロ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "体温低下による健康被害のリスクがあります。"
     },
     {
@@ -26,28 +26,28 @@ const scenarios = [
         description: "避難所での水の配給が少ない。",
         requiredItems: ["飲料水(500ml)"],
         minQuantity: 3,
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "水不足による健康被害のリスクがあります。"
     },
     {
         title: "プライバシー問題",
         description: "避難所において、プライバシーが確保されていない。",
         requiredItems: ["耳栓", "アイマスク", "レジャーシート"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "プライバシーが確保されず，大きなストレスとなるリスクがあります。"
     },
     {
         title: "不潔な髪の毛",
         description: "避難所に、シャンプーやシャワーが置いていない。",
         requiredItems: ["ドライシャンプー"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "髪が洗えず、衛生的に辛くなる可能性があります。"
     },
     {
         title: "感染症",
         description: "生活用水がひっ迫したことで衛生環境が悪化し、手洗いが十分に行えない。",
         requiredItems: ["石鹸", "ウェットティッシュ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "新型コロナやインフルエンザ、ノロウイルスなどの感染症がまん延するリスクがあります。"
     },
     {
@@ -55,138 +55,150 @@ const scenarios = [
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["簡易トイレ"],
         minQuantity: 15,
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "情報が知りたい問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["携帯ラジオ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "ナイフ問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["ナイフ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "ろうそく問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["ろうそく"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     }
 ];
 
-let displayedScenarios = [];  // 表示済みシナリオを追跡
-let simulationCount = 0;      // シミュレーション回数を追跡
-const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || {};
+// 表示済みシナリオを追跡する配列
+let displayedScenarios = [];
 
-// 対応できないシナリオを特定する関数
+// シミュレーション回数を追跡する変数
+let simulationCount = 0;
+
+// 現在表示しているシナリオのインデックス
+let currentIndex = 0;
+
+// 固定されたシナリオの順序を保持する配列
+let fixedScenarioOrder = [];
+
+// ローカルストレージから選択されたアイテムを取得（なければ空オブジェクトを使用）
+const backpackState = JSON.parse(localStorage.getItem('backpackState')) || {};
+const selectedItems = backpackState.selectedItems || {};
+
 function getUnhandledScenarios(selectedItems) {
-    const unhandledScenarios = [];
+    console.log('選択されたアイテム:', selectedItems);
     
-    for (const scenario of scenarios) {
-        if (scenario.title === "水不足") {
-            // 水不足シナリオの特別処理
-            const waterQuantity = selectedItems["飲料水(500ml)"] || 0;
-            if (waterQuantity < 3) {
-                unhandledScenarios.push(scenario);
-            }
-        } else if (scenario.title === "トイレ問題") {
-            // トイレ問題シナリオの特別処理
-            const toiletQuantity = selectedItems["簡易トイレ"] || 0;
-            if (toiletQuantity < 15) {
-                unhandledScenarios.push(scenario);
-            }
-        } else {
-            // その他のシナリオ処理
-            const hasRequiredItems = scenario.requiredItems.some(item => 
-                selectedItems[item] && selectedItems[item] > 0
+    const unhandledScenarios = scenarios.filter(scenario => {
+        // 必須アイテムがすべて揃っているか確認
+        const hasAllRequiredItems = scenario.requiredItems.every(item => {
+            const hasEnoughQuantity = scenario.minQuantity
+                ? (selectedItems[item] || 0) >= scenario.minQuantity // 必要数を満たすか
+                : selectedItems[item] > 0; // 少なくとも1個は持っているか
+            return hasEnoughQuantity;
+        });
+
+        // デバッグ用のログ
+        if (!hasAllRequiredItems) {
+            console.log('未対応のシナリオ:', scenario.title);
+            console.log('不足しているアイテム:', 
+                scenario.requiredItems.filter(item => {
+                    const hasEnoughQuantity = scenario.minQuantity
+                        ? (selectedItems[item] || 0) >= scenario.minQuantity
+                        : selectedItems[item] > 0;
+                    return !hasEnoughQuantity;
+                })
             );
-            if (!hasRequiredItems) {
-                unhandledScenarios.push(scenario);
-            }
         }
-    }
-    
+
+        return !hasAllRequiredItems;
+    });
+
     return unhandledScenarios;
 }
 
-// ランダムな未表示シナリオを取得する関数
-function getNextScenario(unhandledScenarios) {
-    const availableScenarios = unhandledScenarios.filter(
-        scenario => !displayedScenarios.includes(scenario.title)
-    );
-    
-    if (availableScenarios.length === 0) {
-        // すべてのシナリオを表示済みの場合、表示履歴をリセット
-        displayedScenarios = [];
-        return unhandledScenarios[Math.floor(Math.random() * unhandledScenarios.length)];
+
+// 配列をランダムに並び替える関数（Fisher-Yatesアルゴリズム）
+function shuffleScenarios(scenarios) {
+    const array = [...scenarios];
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
     }
-    
-    return availableScenarios[Math.floor(Math.random() * availableScenarios.length)];
+    return array;
 }
 
-// シナリオを表示する関数
-function displayScenario(scenario) {
+// 指定されたインデックスのシナリオを表示する関数
+function displayScenarioByIndex(index) {
+    const scenario = fixedScenarioOrder[index]; // 現在のシナリオを取得
+    
+    // シナリオの内容をHTML要素に反映
     document.getElementById('scenarioTitle').textContent = scenario.title;
-    const requiredItemsElement = document.querySelector('.required-items');
-    requiredItemsElement.innerHTML = `
+    document.querySelector('.required-items').innerHTML = `
         <h3>必要な非常持ち出し品:</h3>
         <p>${scenario.requiredItems.join(', ')}${scenario.minQuantity ? ` (${scenario.minQuantity}個以上)` : ''}</p>
     `;
-    
-    const consequenceElement = document.querySelector('.consequence');
-    consequenceElement.innerHTML = `
+    document.querySelector('.consequence').innerHTML = `
         <h3>対応できない場合の結果:</h3>
         <p>${scenario.consequence}</p>
     `;
-    
     document.getElementById('scenarioImage').src = scenario.image;
-    displayedScenarios.push(scenario.title);
+
+    // ナビゲーションボタンの有効/無効を更新
+    document.getElementById('prevButton').disabled = index === 0; // 最初のシナリオで「前へ」を無効化
+    document.getElementById('nextButton').disabled = index === fixedScenarioOrder.length - 1; // 最後のシナリオで「次へ」を無効化
+
+    // シミュレーションが10回目の場合に「戻る」ボタンを表示
+    if (simulationCount === 10) {
+        document.getElementById('backButton').style.display = 'block';
+    }
 }
 
-// シミュレーションを開始/更新する関数
-function updateSimulation(selectedItems) {
-    const unhandledScenarios = getUnhandledScenarios(selectedItems);
-    
-    if (unhandledScenarios.length === 0) {
-        // すべてのシナリオに対応可能な場合
+// シミュレーションを初期化する関数
+function initializeSimulation(selectedItems) {
+    const unhandledScenarios = getUnhandledScenarios(selectedItems); // 未対応シナリオを取得
+    fixedScenarioOrder = shuffleScenarios(unhandledScenarios); // ランダムな順序で固定
+    simulationCount = 0;  // シミュレーション回数をリセット
+    currentIndex = 0;     // 現在のインデックスをリセット
+
+    // シナリオがある場合は最初のシナリオを表示、ない場合はメッセージを表示
+    if (fixedScenarioOrder.length > 0) {
+        displayScenarioByIndex(currentIndex);
+    } else {
         document.getElementById('feedback').innerHTML = 
             "<p>現在の持ち出し袋で、すべてのシナリオに対応できます。</p>";
-        return;
     }
-    
-    if (simulationCount >= 10) {
-        // 10回のシミュレーション後、続行するかユーザーに確認
-        const continueButton = document.createElement('button');
-        continueButton.textContent = 'さらにシナリオを見る';
-        continueButton.onclick = () => {
-            simulationCount = 0;
-            const nextScenario = getNextScenario(unhandledScenarios);
-            displayScenario(nextScenario);
-        };
-        document.querySelector('.navigation').appendChild(continueButton);
-        return;
-    }
-    
-    const nextScenario = getNextScenario(unhandledScenarios);
-    displayScenario(nextScenario);
-    simulationCount++;
 }
 
-// ナビゲーションボタンのイベントリスナー
-document.querySelectorAll('.navigation button').forEach(button => {
-    button.addEventListener('click', () => {
-        if (simulationCount < 10) {
-            updateSimulation(selectedItems); // selectedItemsはグローバル変数として存在する前提
-        }
-    });
+// 「前へ」ボタンのクリックイベント
+document.getElementById('prevButton').addEventListener('click', () => {
+    if (currentIndex > 0) {
+        currentIndex--; // インデックスを1つ戻す
+        displayScenarioByIndex(currentIndex); // 前のシナリオを表示
+    }
 });
 
-// 初期表示
-updateSimulation({});
+// 「次へ」ボタンのクリックイベント
+document.getElementById('nextButton').addEventListener('click', () => {
+    if (currentIndex < fixedScenarioOrder.length - 1) {
+        currentIndex++; // インデックスを1つ進める
+        simulationCount++; // シミュレーション回数を更新
+        displayScenarioByIndex(currentIndex); // 次のシナリオを表示
+    }
+});
+
+console.log('選択されたアイテム全体:', selectedItems);
+// シミュレーションを開始
+initializeSimulation(selectedItems);
+
