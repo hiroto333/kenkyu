@@ -11,14 +11,14 @@ const scenarios = [
         title: "道路損壊",
         description: "地震で道路が損壊し、避難所までの道のりが普段より遠回りに。",
         requiredItems: ["紐なしのズック靴"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "長距離歩行による疲労と脱水のリスクがあります。"
     },
     {
         title: "寒波到来",
         description: "避難所に向かう途中、急激な気温低下が発生。",
         requiredItems: ["毛布", "使い捨てカイロ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "体温低下による健康被害のリスクがあります。"
     },
     {
@@ -26,28 +26,28 @@ const scenarios = [
         description: "避難所での水の配給が少ない。",
         requiredItems: ["飲料水(500ml)"],
         minQuantity: 3,
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "水不足による健康被害のリスクがあります。"
     },
     {
         title: "プライバシー問題",
         description: "避難所において、プライバシーが確保されていない。",
         requiredItems: ["耳栓", "アイマスク", "レジャーシート"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "プライバシーが確保されず，大きなストレスとなるリスクがあります。"
     },
     {
         title: "不潔な髪の毛",
         description: "避難所に、シャンプーやシャワーが置いていない。",
         requiredItems: ["ドライシャンプー"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "髪が洗えず、衛生的に辛くなる可能性があります。"
     },
     {
         title: "感染症",
         description: "生活用水がひっ迫したことで衛生環境が悪化し、手洗いが十分に行えない。",
         requiredItems: ["石鹸", "ウェットティッシュ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "新型コロナやインフルエンザ、ノロウイルスなどの感染症がまん延するリスクがあります。"
     },
     {
@@ -55,28 +55,28 @@ const scenarios = [
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["簡易トイレ"],
         minQuantity: 15,
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "情報が知りたい問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["携帯ラジオ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "ナイフ問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["ナイフ"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     },
     {
         title: "ろうそく問題",
         description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
         requiredItems: ["ろうそく"],
-        image: "/api/placeholder/800/300",
+        image: "",
         consequence: "トイレが混んでいて，行けない可能性があります。"
     }
 ];
@@ -94,36 +94,38 @@ let currentIndex = 0;
 let fixedScenarioOrder = [];
 
 // ローカルストレージから選択されたアイテムを取得（なければ空オブジェクトを使用）
-const selectedItems = JSON.parse(localStorage.getItem('selectedItems')) || {};
+const backpackState = JSON.parse(localStorage.getItem('backpackState')) || {};
+const selectedItems = backpackState.selectedItems || {};
 
 function getUnhandledScenarios(selectedItems) {
-    const unhandledScenarios = []; // 未対応のシナリオを保存する配列
+    console.log('選択されたアイテム:', selectedItems);
+    
+    const unhandledScenarios = scenarios.filter(scenario => {
+        // 必須アイテムがすべて揃っているか確認
+        const hasAllRequiredItems = scenario.requiredItems.every(item => {
+            const hasEnoughQuantity = scenario.minQuantity
+                ? (selectedItems[item] || 0) >= scenario.minQuantity // 必要数を満たすか
+                : selectedItems[item] > 0; // 少なくとも1個は持っているか
+            return hasEnoughQuantity;
+        });
 
-    for (const scenario of scenarios) {
-        if (scenario.minQuantity) {
-            // 必要数量が指定されている場合（例：水不足やトイレ問題）
-            const totalQuantity = scenario.requiredItems.reduce((sum, item) => {
-                return sum + (selectedItems[item] || 0);
-            }, 0);
-
-            // 合計数量がminQuantityを満たしていない場合
-            if (totalQuantity < scenario.minQuantity) {
-                unhandledScenarios.push(scenario);
-            }
-        } else {
-            // 必要数量が指定されていない場合、1つでも対応アイテムがあればOK
-            const hasRequiredItems = scenario.requiredItems.every(item =>
-                selectedItems[item] && selectedItems[item] > 0
+        // デバッグ用のログ
+        if (!hasAllRequiredItems) {
+            console.log('未対応のシナリオ:', scenario.title);
+            console.log('不足しているアイテム:', 
+                scenario.requiredItems.filter(item => {
+                    const hasEnoughQuantity = scenario.minQuantity
+                        ? (selectedItems[item] || 0) >= scenario.minQuantity
+                        : selectedItems[item] > 0;
+                    return !hasEnoughQuantity;
+                })
             );
-
-            // 必要なアイテムが揃っていない場合
-            if (!hasRequiredItems) {
-                unhandledScenarios.push(scenario);
-            }
         }
-    }
 
-    return unhandledScenarios; // 未対応シナリオのリストを返す
+        return !hasAllRequiredItems;
+    });
+
+    return unhandledScenarios;
 }
 
 
@@ -196,6 +198,7 @@ document.getElementById('nextButton').addEventListener('click', () => {
     }
 });
 
+console.log('選択されたアイテム全体:', selectedItems);
 // シミュレーションを開始
 initializeSimulation(selectedItems);
 
