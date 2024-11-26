@@ -295,7 +295,32 @@ firebase.auth().onAuthStateChanged((user) => {
     }
 });
 
-// 作成完了ボタンのイベントハンドラ
+function saveSelectedItemsLog(userId, selectedItems, currentWeight, currentVolume) {
+    const userRef = firebase.database().ref(`users/${userId}/selectedItemsCount`);
+    const logRef = firebase.database().ref(`users/${userId}/selectedItems`);
+    
+    // トランザクションでカウントをインクリメントして保存
+    userRef.transaction((currentCount) => {
+        return (currentCount || 0) + 1; // 現在のカウントをインクリメント
+    }).then((result) => {
+        const newCount = result.snapshot.val(); // 増加後の値を取得
+        logRef.child(newCount).set({
+            items: selectedItems,
+            totalWeight: currentWeight,
+            totalVolume: currentVolume,
+            timestamp: new Date().toISOString()
+        }).then(() => {
+            console.log(`データがログ ${newCount} に保存されました！`);
+            alert(`データがログ ${newCount} に保存されました！`);
+        }).catch((error) => {
+            console.error("データ保存中にエラーが発生しました:", error);
+            alert("データ保存に失敗しました。");
+        });
+    }).catch((error) => {
+        console.error("カウント更新中にエラーが発生しました:", error);
+    });
+}
+
 function completeSelection() {
     // 選択が空の場合は警告
     if (Object.keys(selectedItems).length === 0) {
@@ -312,26 +337,20 @@ function completeSelection() {
 
     const userId = user.uid; // ユーザーのUIDを取得
 
-    // Firebase Realtime Databaseにデータを保存
-    firebase.database().ref(`users/${userId}/selectedItems`).set({
-        items: selectedItems,
-        totalWeight: currentWeight,
-        totalVolume: currentVolume,
-        timestamp: new Date().toISOString()
-    }).then(() => {
-        alert('データが正常に保存されました！');
-        // フィードバックエリアを表示
-        const feedbackContainer = document.getElementById('feedback');
-        feedbackContainer.style.display = 'block';
+    // ログとして保存
+    saveSelectedItemsLog(userId, selectedItems, currentWeight, currentVolume);
 
-        // チェックリストエリアを非表示
-        document.querySelector('.checklist').style.display = 'none';
-        saveState(); // 完了時の状態を保存
-    }).catch((error) => {
-        console.error('データ保存中にエラーが発生しました:', error);
-        alert('データ保存に失敗しました。');
-    });
+    // フィードバックエリアを表示
+    const feedbackContainer = document.getElementById('feedback');
+    feedbackContainer.style.display = 'block';
+
+    // チェックリストエリアを非表示
+    document.querySelector('.checklist').style.display = 'none';
+
+    // 状態を保存
+    saveState();
 }
+
 
 // シミュレーション開始関数
 function startSimulation() {
