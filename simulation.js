@@ -81,6 +81,18 @@ const scenarios = [
     }
 ];
 
+var firebaseConfig = {
+    apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
+    authDomain: "kenkyudb.firebaseapp.com",
+    projectId: "kenkyudb",
+    storageBucket: "kenkyudb.firebasestorage.app",
+    messagingSenderId: "186602532556",
+    appId: "1:186602532556:web:cf6f5a0a870a36332cdc69",
+    measurementId: "G-0WLMS9GGXC"
+};
+
+firebase.initializeApp(firebaseConfig);
+
 // 表示済みシナリオを追跡する配列
 let displayedScenarios = [];
 
@@ -159,6 +171,26 @@ function displayScenarioByIndex(index) {
     document.getElementById('prevButton').disabled = index === 0; // 最初のシナリオで「前へ」を無効化
     document.getElementById('nextButton').disabled = index === fixedScenarioOrder.length - 1; // 最後のシナリオで「次へ」を無効化
 
+    // 既存の表示コードに続けて
+    const feedbackCheckbox = document.getElementById('scenarioFeedbackCheck');
+    
+    // チェックボックスの状態をリセット
+    feedbackCheckbox.checked = false;
+    
+    // ユーザーのチェック状態を取得して復元
+    const user = firebase.auth().currentUser;
+    if (user) {
+        const userId = user.uid;
+        const scenarioFeedbackRef = firebase.database().ref(`users/${userId}/scenarioFeedback/${scenario.title}`);
+        
+        scenarioFeedbackRef.once('value').then((snapshot) => {
+            const feedbackData = snapshot.val();
+            if (feedbackData) {
+                feedbackCheckbox.checked = feedbackData.checked;
+            }
+        });
+    }
+
     // シミュレーションが10回目の場合に「戻る」ボタンを表示
     if (simulationCount === 10) {
         document.getElementById('backButton').style.display = 'block';
@@ -197,6 +229,40 @@ document.getElementById('nextButton').addEventListener('click', () => {
         displayScenarioByIndex(currentIndex); // 次のシナリオを表示
     }
 });
+
+// チェックボックスのイベントリスナーを追加
+document.getElementById('scenarioFeedbackCheck').addEventListener('change', function() {
+    const currentScenario = fixedScenarioOrder[currentIndex];
+    saveScenarioFeedback(currentScenario, this.checked);
+});
+
+/**
+ * チェックされたシナリオをFirebaseに保存する関数
+ * @param {Object} scenario - チェックされたシナリオオブジェクト
+ * @param {boolean} isChecked - チェックの状態
+ */
+function saveScenarioFeedback(scenario, isChecked) {
+    // ユーザーがログインしていることを確認
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        alert('ログインが必要です。');
+        return;
+    }
+
+    const userId = user.uid;
+    const scenarioFeedbackRef = firebase.database().ref(`users/${userId}/scenarioFeedback`);
+
+    // シナリオタイトルをキーとして使用
+    scenarioFeedbackRef.child(scenario.title).set({
+        title: scenario.title,
+        checked: isChecked,
+        timestamp: firebase.database.ServerValue.TIMESTAMP
+    }).then(() => {
+        console.log(`シナリオ「${scenario.title}」のフィードバックを保存しました`);
+    }).catch((error) => {
+        console.error('フィードバック保存中にエラーが発生しました:', error);
+    });
+}
 
 console.log('選択されたアイテム全体:', selectedItems);
 // シミュレーションを開始

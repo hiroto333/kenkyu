@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>災害発生後の疑似避難体験</title>
     <link rel="stylesheet" href="./simulation.css" type="text/css"/>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
     <div class="container">
@@ -23,6 +26,10 @@
                 <div class="consequence">
                     <h3>対応できない場合の結果:</h3>
                     <p id="consequence"></p>
+                </div>
+                <div class="feedback-checkbox">
+                    <input type="checkbox" id="scenarioFeedbackCheck" name="scenarioFeedback">
+                    <label for="scenarioFeedbackCheck">考えていなかった状況ならチェック！</label>
                 </div>
             </div>
         </div>
