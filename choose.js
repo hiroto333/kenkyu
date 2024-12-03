@@ -296,22 +296,22 @@ firebase.auth().onAuthStateChanged((user) => {
 });
 
 function saveSelectedItemsLog(userId, selectedItems, currentWeight, currentVolume) {
-    const userRef = firebase.database().ref(`users/${userId}/selectedItemsCount`);
-    const logRef = firebase.database().ref(`users/${userId}/selectedItems`);
+    const userRef = firebase.database().ref(`users/${userId}/sessionCount`);
+    const logRef = firebase.database().ref(`users/${userId}/session`);
     
     // トランザクションでカウントをインクリメントして保存
     userRef.transaction((currentCount) => {
         return (currentCount || 0) + 1; // 現在のカウントをインクリメント
     }).then((result) => {
-        const newCount = result.snapshot.val(); // 増加後の値を取得
-        logRef.child(newCount).set({
+        const currentCount = result.snapshot.val(); // 増加後の値を取得
+        logRef.child(currentCount).child("select").set({
             items: selectedItems,
             totalWeight: currentWeight,
             totalVolume: currentVolume,
             timestamp: new Date().toISOString()
         }).then(() => {
-            console.log(`データがログ ${newCount} に保存されました！`);
-            alert(`データがログ ${newCount} に保存されました！`);
+            console.log(`データがログ ${currentCount} に保存されました！`);
+            alert(`データがログ ${currentCount} に保存されました！`);
         }).catch((error) => {
             console.error("データ保存中にエラーが発生しました:", error);
             alert("データ保存に失敗しました。");
