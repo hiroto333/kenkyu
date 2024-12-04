@@ -13,7 +13,8 @@ const items = {
         { name: "マッチ", weight: 0.05, volume: 30, explanation: "防水タイプが望ましい。ライターのバックアップとして。", unit: "箱", dimensions: "5×3×2cm" },
         { name: "ろうそく", weight: 0.1, volume: 100, explanation: "長時間の照明として。火災に注意。", unit: "本", dimensions: "10×2×2cm" },
         { name: "ナイフ", weight: 0.2, volume: 150, explanation: "マルチツール型が便利。様々な用途に使用可能。", unit: "個", dimensions: "10×3×2cm" },
-        { name: "軍手", weight: 0.1, volume: 200, explanation: "がれきの撤去や防寒用。耐切創タイプが望ましい。", unit: "組", dimensions: "25×15×1cm" }
+        { name: "軍手", weight: 0.1, volume: 200, explanation: "がれきの撤去や防寒用。耐切創タイプが望ましい。", unit: "組", dimensions: "25×15×1cm" },
+        { name: "給水袋", weight: 0.1, volume: 200, explanation: "水を入れる袋。", unit: "袋", dimensions: "25×15×1cm" }
     ],
     "食料と水": [
         { name: "飲料水(500ml)", weight: 0.5, volume: 500, explanation: "1人1日3リットルが目安。必要最小限でも500ml×3本。", unit: "本", dimensions: "21×7×7cm" },
@@ -25,7 +26,7 @@ const items = {
         { name: "衣類", weight: 0.5, volume: 2000, explanation: "下着を含む着替え一式。速乾性の素材が望ましい。", unit: "組", dimensions: "25×20×4cm" },
         { name: "レジャーシート", weight: 0.2, volume: 300, explanation: "地面に敷いて使用。断熱効果もある。", unit: "枚", dimensions: "15×10×2cm" },
         { name: "使い捨てカイロ", weight: 0.1, volume: 100, explanation: "使い捨てられるカイロ。", unit: "枚", dimensions: "10×10×10cm" },
-        { name: "アルミシート", weight: 0.2, volume: 800, explanation: "体に巻くと保温できる。", unit: "個", dimensions: "10×10×10cm" }
+        { name: "アルミ製保温シート", weight: 0.2, volume: 800, explanation: "体に巻くと保温できる。", unit: "個", dimensions: "10×10×10cm" }
     ],
     "衛生用品": [
         { name: "トイレットペーパー", weight: 0.2, volume: 1000, explanation: "必要最小限の量を持参。圧縮タイプが便利。", unit: "巻", dimensions: "10×10×10cm" },
@@ -366,6 +367,3 @@ window.onload = function() {
     createItemList();
     restoreState(); // 保存された状態を復元
 };
-
-// 初期化：アイテムリストを作成
-createItemList();
