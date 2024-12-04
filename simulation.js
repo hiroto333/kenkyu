@@ -126,7 +126,7 @@ function getUnhandledScenarios(selectedItems) {
     
     const unhandledScenarios = scenarios.filter(scenario => {
         // 必須アイテムがすべて揃っているか確認
-        const hasAllRequiredItems = scenario.requiredItems.every(item => {
+        const hasAllRequiredItems = scenario.requiredItems.some(item => {
             const hasEnoughQuantity = scenario.minQuantity
                 ? (selectedItems[item] || 0) >= scenario.minQuantity // 必要数を満たすか
                 : selectedItems[item] > 0; // 少なくとも1個は持っているか
@@ -178,6 +178,8 @@ function displayScenarioByIndex(index) {
     `;
     document.getElementById('scenarioImage').src = scenario.image;
 
+    markScenarioAsViewed(scenario);
+
     // ナビゲーションボタンの有効/無効を更新
     document.getElementById('prevButton').disabled = index === 0; // 最初のシナリオで「前へ」を無効化
     document.getElementById('nextButton').disabled = index === fixedScenarioOrder.length - 1; // 最後のシナリオで「次へ」を無効化
@@ -201,6 +203,12 @@ function displayScenarioByIndex(index) {
     if (simulationCount === 10) {
         document.getElementById('backButton').style.display = 'block';
     }
+}
+
+function markScenarioAsViewed(scenario) {
+    scenario.viewed = true;
+    scenario.viewedTimestamp = new Date().toISOString();
+    return scenario;
 }
 
 // シミュレーションを初期化する関数
@@ -278,6 +286,8 @@ function saveScenarioFeedback() {
             return {
                 title: scenario.title,
                 checked: feedbackState[scenario.title]?.checked || false,
+                viewed: scenario.viewed || false,
+                viewedTimestamp: scenario.viewedTimestamp || null,
                 timestamp: feedbackState[scenario.title]?.timestamp || new Date().toISOString(),
             };
         }).filter(Boolean);
