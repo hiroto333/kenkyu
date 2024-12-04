@@ -60,26 +60,38 @@ const scenarios = [
     },
     {
         title: "情報が知りたい問題",
-        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        description: "避難所での情報が不足している。",
         requiredItems: ["携帯ラジオ"],
         image: "",
-        consequence: "トイレが混んでいて，行けない可能性があります。"
+        consequence: "必要な情報が得られず、不安が増す可能性があります。"
     },
     {
         title: "ナイフ問題",
-        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        description: "避難所生活において簡易工具がない。",
         requiredItems: ["ナイフ"],
         image: "",
-        consequence: "トイレが混んでいて，行けない可能性があります。"
+        consequence: "様々な場面で不便を感じる可能性があります。"
     },
     {
         title: "ろうそく問題",
-        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        description: "停電が続く中、予備の光源がない。",
         requiredItems: ["ろうそく"],
         image: "",
-        consequence: "トイレが混んでいて，行けない可能性があります。"
+        consequence: "暗闇で行動が制限される可能性があります。"
     }
 ];
+
+var firebaseConfig = {
+    apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
+    authDomain: "kenkyudb.firebaseapp.com",
+    projectId: "kenkyudb",
+    storageBucket: "kenkyudb.firebasestorage.app",
+    messagingSenderId: "186602532556",
+    appId: "1:186602532556:web:cf6f5a0a870a36332cdc69",
+    measurementId: "G-0WLMS9GGXC"
+};
+
+firebase.initializeApp(firebaseConfig);
 
 // 表示済みシナリオを追跡する配列
 let displayedScenarios = [];
@@ -93,6 +105,18 @@ let currentIndex = 0;
 // 固定されたシナリオの順序を保持する配列
 let fixedScenarioOrder = [];
 
+// ページが読み込まれたときに認証状態を確認
+firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+        console.log('ログイン中のユーザー:', user.email);
+        initializeSimulation(selectedItems); // ユーザーがいる場合にシミュレーションを開始
+    } else {
+        console.log('ログインしていません。ログイン画面に移動します。');
+        alert('ログインが必要です。ログイン画面に移動します。');
+        window.location.href = 'login.html'; // ログイン画面にリダイレクト
+    }
+});
+
 // ローカルストレージから選択されたアイテムを取得（なければ空オブジェクトを使用）
 const backpackState = JSON.parse(localStorage.getItem('backpackState')) || {};
 const selectedItems = backpackState.selectedItems || {};
@@ -102,7 +126,7 @@ function getUnhandledScenarios(selectedItems) {
     
     const unhandledScenarios = scenarios.filter(scenario => {
         // 必須アイテムがすべて揃っているか確認
-        const hasAllRequiredItems = scenario.requiredItems.every(item => {
+        const hasAllRequiredItems = scenario.requiredItems.some(item => {
             const hasEnoughQuantity = scenario.minQuantity
                 ? (selectedItems[item] || 0) >= scenario.minQuantity // 必要数を満たすか
                 : selectedItems[item] > 0; // 少なくとも1個は持っているか
@@ -127,7 +151,6 @@ function getUnhandledScenarios(selectedItems) {
 
     return unhandledScenarios;
 }
-
 
 // 配列をランダムに並び替える関数（Fisher-Yatesアルゴリズム）
 function shuffleScenarios(scenarios) {
@@ -155,14 +178,37 @@ function displayScenarioByIndex(index) {
     `;
     document.getElementById('scenarioImage').src = scenario.image;
 
+    markScenarioAsViewed(scenario);
+
     // ナビゲーションボタンの有効/無効を更新
     document.getElementById('prevButton').disabled = index === 0; // 最初のシナリオで「前へ」を無効化
     document.getElementById('nextButton').disabled = index === fixedScenarioOrder.length - 1; // 最後のシナリオで「次へ」を無効化
+
+    const feedbackCheckbox = document.getElementById('scenarioFeedbackCheck');
+    feedbackCheckbox.checked = false;
+
+    // LocalStorageから状態を復元
+    const feedbackState = restoreFeedbackFromLocalStorage();
+    if (feedbackState[scenario.title]?.checked) {
+        feedbackCheckbox.checked = true;
+    }
+
+    // チェックボックスのイベントリスナー
+    feedbackCheckbox.onchange = function () {
+        const isChecked = feedbackCheckbox.checked;
+        saveFeedbackToLocalStorage(scenario, isChecked); // LocalStorageに保存
+    };
 
     // シミュレーションが10回目の場合に「戻る」ボタンを表示
     if (simulationCount === 10) {
         document.getElementById('backButton').style.display = 'block';
     }
+}
+
+function markScenarioAsViewed(scenario) {
+    scenario.viewed = true;
+    scenario.viewedTimestamp = new Date().toISOString();
+    return scenario;
 }
 
 // シミュレーションを初期化する関数
@@ -181,6 +227,19 @@ function initializeSimulation(selectedItems) {
     }
 }
 
+// バックボタンのイベント
+document.getElementById('backButton').addEventListener('click', () => {
+    saveScenarioFeedback()
+        .then(() => {
+            window.location.href = 'choose.html';
+        })
+        .catch(error => {
+            console.error('フィードバック保存中にエラーが発生:', error);
+            // オプション：エラー時の処理（ユーザーへの通知など）
+            window.location.href = 'choose.html';
+        });
+});
+
 // 「前へ」ボタンのクリックイベント
 document.getElementById('prevButton').addEventListener('click', () => {
     if (currentIndex > 0) {
@@ -192,11 +251,80 @@ document.getElementById('prevButton').addEventListener('click', () => {
 // 「次へ」ボタンのクリックイベント
 document.getElementById('nextButton').addEventListener('click', () => {
     if (currentIndex < fixedScenarioOrder.length - 1) {
-        currentIndex++; // インデックスを1つ進める
+        currentIndex++; // インデックスを進める
         simulationCount++; // シミュレーション回数を更新
         displayScenarioByIndex(currentIndex); // 次のシナリオを表示
     }
 });
+
+function saveScenarioFeedback() {
+    return new Promise((resolve, reject) => {
+        const user = firebase.auth().currentUser;
+        if (!user) {
+            alert('ログインが必要です。');
+            reject(new Error('ログインが必要です'));
+            return;
+        }
+
+        const userId = user.uid;
+        const logRef = firebase.database().ref(`users/${userId}/session`);
+        const userRef = firebase.database().ref(`users/${userId}/sessionCount`);
+
+        const feedbackState = restoreFeedbackFromLocalStorage();
+
+        if (!fixedScenarioOrder || fixedScenarioOrder.length === 0) {
+            console.error('fixedScenarioOrderが空です。シミュレーションを初期化してください。');
+            reject(new Error('シナリオデータが見つかりませんでした'));
+            return;
+        }
+
+        const allScenarios = fixedScenarioOrder.map(scenario => {
+            if (!scenario || !scenario.title) {
+                console.warn('無効なシナリオが検出されました:', scenario);
+                return null;
+            }
+            return {
+                title: scenario.title,
+                checked: feedbackState[scenario.title]?.checked || false,
+                viewed: scenario.viewed || false,
+                viewedTimestamp: scenario.viewedTimestamp || null,
+                timestamp: feedbackState[scenario.title]?.timestamp || new Date().toISOString(),
+            };
+        }).filter(Boolean);
+
+        userRef.once('value').then(snapshot => {
+            const currentCount = snapshot.val() || 0;
+
+            logRef.child(currentCount).child("feedback").set({
+                scenarios: allScenarios,
+                timestamp: new Date().toISOString(),
+            }).then(() => {
+                console.log(`シミュレーションのフィードバックをログ${currentCount}に保存しました`);
+                resolve(); // 保存成功時にresolve
+            }).catch(error => {
+                console.error('シナリオフィードバック保存中にエラーが発生:', error);
+                reject(error); // 保存失敗時にreject
+            });
+        }).catch(error => {
+            console.error('セッションカウント取得中にエラーが発生:', error);
+            reject(error);
+        });
+    });
+}
+
+// LocalStorageでシナリオのチェック状態を管理
+function saveFeedbackToLocalStorage(scenario, isChecked) {
+    const feedbackState = JSON.parse(localStorage.getItem('scenarioFeedbackState')) || {};
+    feedbackState[scenario.title] = {
+        checked: isChecked,
+        timestamp: new Date().toISOString(), // 最新のタイムスタンプを保存
+    };
+    localStorage.setItem('scenarioFeedbackState', JSON.stringify(feedbackState));
+}
+
+function restoreFeedbackFromLocalStorage() {
+    return JSON.parse(localStorage.getItem('scenarioFeedbackState')) || {};
+}
 
 console.log('選択されたアイテム全体:', selectedItems);
 // シミュレーションを開始
