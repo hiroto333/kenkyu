@@ -81,6 +81,17 @@ const scenarios = [
     }
 ];
 
+// 女性特有のシナリオ
+const femaleSpecificScenarios = [
+    {
+        title: "生理用品の不足",
+        description: "避難所生活が長引き、生理用品が不足している状況です。",
+        requiredItems: ["生理用品"],
+        image: "",
+        consequence: "生理用品が不足することで、心身ともに大きなストレスを感じる可能性があります。"
+    }
+];
+
 var firebaseConfig = {
     apiKey: "AIzaSyA3B-JtnE5NlcyL5sqoT877oSnS4Mnpk0I",
     authDomain: "kenkyudb.firebaseapp.com",
@@ -104,6 +115,30 @@ let currentIndex = 0;
 
 // 固定されたシナリオの順序を保持する配列
 let fixedScenarioOrder = [];
+// 性別に基づいてシナリオを取得する関数
+function getScenariosByGender(userId) {
+    return new Promise((resolve, reject) => {
+        const genderRef = firebase.database().ref(`users/${userId}/profile/gender`);
+        
+        genderRef.once('value')
+            .then((snapshot) => {
+                const gender = snapshot.val();
+                console.log('ユーザーの性別:', gender);
+                
+                if (gender === 'female') {
+                    // 女性の場合、基本シナリオと女性特有のシナリオを結合
+                    resolve([...scenarios, ...femaleSpecificScenarios]);
+                } else {
+                    // 男性の場合、基本シナリオのみ
+                    resolve(scenarios);
+                }
+            })
+            .catch((error) => {
+                console.error('性別データの取得エラー:', error);
+                resolve(baseScenarios);
+            });
+    });
+}
 
 // ページが読み込まれたときに認証状態を確認
 firebase.auth().onAuthStateChanged((user) => {
@@ -121,10 +156,10 @@ firebase.auth().onAuthStateChanged((user) => {
 const backpackState = JSON.parse(localStorage.getItem('backpackState')) || {};
 const selectedItems = backpackState.selectedItems || {};
 
-function getUnhandledScenarios(selectedItems) {
+function getUnhandledScenarios(selectedItems, scenarioList) {
     console.log('選択されたアイテム:', selectedItems);
     
-    const unhandledScenarios = scenarios.filter(scenario => {
+    const unhandledScenarios = scenarioList.filter(scenario => {
         // 必須アイテムがすべて揃っているか確認
         const hasAllRequiredItems = scenario.requiredItems.some(item => {
             const hasEnoughQuantity = scenario.minQuantity
@@ -213,18 +248,29 @@ function markScenarioAsViewed(scenario) {
 
 // シミュレーションを初期化する関数
 function initializeSimulation(selectedItems) {
-    const unhandledScenarios = getUnhandledScenarios(selectedItems); // 未対応シナリオを取得
-    fixedScenarioOrder = shuffleScenarios(unhandledScenarios); // ランダムな順序で固定
-    simulationCount = 0;  // シミュレーション回数をリセット
-    currentIndex = 0;     // 現在のインデックスをリセット
-
-    // シナリオがある場合は最初のシナリオを表示、ない場合はメッセージを表示
-    if (fixedScenarioOrder.length > 0) {
-        displayScenarioByIndex(currentIndex);
-    } else {
-        document.getElementById('feedback').innerHTML = 
-            "<p>現在の持ち出し袋で、すべてのシナリオに対応できます。</p>";
+    const user = firebase.auth().currentUser;
+    if (!user) {
+        console.error('ユーザーがログインしていません');
+        return;
     }
+
+    getScenariosByGender(user.uid)
+        .then(appropriateScenarios => {
+            const unhandledScenarios = getUnhandledScenarios(selectedItems, appropriateScenarios);
+            fixedScenarioOrder = shuffleScenarios(unhandledScenarios);
+            simulationCount = 0;
+            currentIndex = 0;
+
+            if (fixedScenarioOrder.length > 0) {
+                displayScenarioByIndex(currentIndex);
+            } else {
+                document.getElementById('feedback').innerHTML = 
+                    "<p>現在の持ち出し袋で、すべてのシナリオに対応できます。</p>";
+            }
+        })
+        .catch(error => {
+            console.error('シナリオの初期化エラー:', error);
+        });
 }
 
 // バックボタンのイベント

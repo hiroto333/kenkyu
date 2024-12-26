@@ -10,6 +10,20 @@
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
 </head>
 <body>
+    <div id="gender-modal" class="modal">
+        <div class="modal-content">
+            <h2>性別を選択してください</h2>
+            <form id="gender-form">
+                <label>
+                    <input type="radio" name="gender" value="male" required> 男性
+                </label>
+                <label>
+                    <input type="radio" name="gender" value="female" required> 女性
+                </label>
+                <button type="submit">保存</button>
+            </form>
+        </div>
+    </div>
     <div class="container">
         <div class="checklist">
             <h1>非常持ち出し品リスト</h1>
