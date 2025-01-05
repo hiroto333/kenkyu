@@ -1,84 +1,170 @@
 // シナリオデータ
 const scenarios = [
     {
-        title: "停電発生",
-        description: "夜間に大規模停電が発生。懐中電灯がないと避難経路が確認できません。",
-        requiredItems: ["懐中電灯"],
-        image: "flashlight-7481941_1280.jpg",
-        consequence: "暗闇の中で避難経路を見失う可能性があります。"
+        title: "寒波到来①",
+        description: "多くの避難所では、火災の恐れや電気容量の問題から暖房器具などが使えなかった。",
+        requiredItems: ["使い捨てカイロ","毛布","アルミブランケット"],
+        consequence: "電気を使わずに寒さ対策ができる。"
     },
     {
-        title: "道路損壊",
-        description: "地震で道路が損壊し、避難所までの道のりが普段より遠回りに。",
-        requiredItems: ["紐なしのズック靴"],
-        image: "",
-        consequence: "長距離歩行による疲労と脱水のリスクがあります。"
+        title: "プライバシー問題",
+        description: "避難所において、プライバシーが確保されず、避難者に大きなストレスとなった。",
+        requiredItems: ["レジャーシート"],
+        consequence: "仕切りを作れて，プライバシーがある程度確保できる。"
     },
     {
-        title: "寒波到来",
-        description: "避難所に向かう途中、急激な気温低下が発生。",
-        requiredItems: ["毛布", "使い捨てカイロ"],
-        image: "",
-        consequence: "体温低下による健康被害のリスクがあります。"
+        title: "睡眠環境（夜間の明るさ）",
+        description: "避難所の照明が明るく、眠れなかった。",
+        requiredItems: ["アイマスク"],
+        consequence: "明るさを気にせず、眠れる。"
+    },
+    {
+        title: "睡眠環境（騒音）",
+        description: "避難所で他の避難者の騒音で眠れなかった。",
+        requiredItems: ["耳栓"],
+        consequence: "騒音を気にせず、眠れる。"
     },
     {
         title: "水不足",
         description: "避難所での水の配給が少ない。",
         requiredItems: ["飲料水(500ml)"],
-        minQuantity: 3,
-        image: "",
+        minQuantity: 4,
         consequence: "水不足による健康被害のリスクがあります。"
     },
     {
-        title: "プライバシー問題",
-        description: "避難所において、プライバシーが確保されていない。",
-        requiredItems: ["耳栓", "アイマスク", "レジャーシート"],
-        image: "",
-        consequence: "プライバシーが確保されず，大きなストレスとなるリスクがあります。"
-    },
-    {
         title: "不潔な髪の毛",
-        description: "避難所に、シャンプーやシャワーが置いていない。",
+        description: "避難所では、水不足で髪を洗えなくて辛かった。",
         requiredItems: ["ドライシャンプー"],
-        image: "",
-        consequence: "髪が洗えず、衛生的に辛くなる可能性があります。"
+        consequence: "水を使わずにスッキリできる。"
     },
     {
-        title: "感染症",
-        description: "生活用水がひっ迫したことで衛生環境が悪化し、手洗いが十分に行えない。",
-        requiredItems: ["石鹸", "ウェットティッシュ"],
-        image: "",
-        consequence: "新型コロナやインフルエンザ、ノロウイルスなどの感染症がまん延するリスクがあります。"
+        title: "感染症蔓延",
+        description: "衛生環境が悪化し，コロナやインフルエンザなどの感染症が蔓延した。",
+        requiredItems: ["石鹸","マスク(3枚入り)","アルコール消毒液"],
+        consequence: "感染症のリスクが低減する。"
     },
     {
-        title: "トイレ問題",
-        description: "仮説トイレ到着が遅れており、避難所のトイレが混んでいる。",
+        title: "トイレに行けない",
+        description: "仮設トイレ到着が遅れ，トイレが出来なかった。",
         requiredItems: ["簡易トイレ"],
-        minQuantity: 15,
-        image: "",
-        consequence: "トイレが混んでいて，行けない可能性があります。"
+        minQuantity: 6,
+        consequence: "仮設トイレが無くても、トイレができる。"
     },
     {
-        title: "情報が知りたい問題",
-        description: "避難所での情報が不足している。",
-        requiredItems: ["携帯ラジオ"],
-        image: "",
-        consequence: "必要な情報が得られず、不安が増す可能性があります。"
+        title: "蒸し風呂状態",
+        description: "日差しの影響で、避難所内は蒸し風呂状態だった。",
+        requiredItems: ["ハンディファン","冷感シート"],
+        consequence: "暑さ対策ができる。"
     },
     {
-        title: "ナイフ問題",
-        description: "避難所生活において簡易工具がない。",
-        requiredItems: ["ナイフ"],
-        image: "",
-        consequence: "様々な場面で不便を感じる可能性があります。"
+        title: "食料不足",
+        description: "全国各地から届けられた食料が避難所まで行き届かなかった。",
+        requiredItems: ["非常食"],
+        minQuantity: 6,
+        consequence: "避難所からの支援が無くても、食料を食べられる。"
     },
     {
-        title: "ろうそく問題",
-        description: "停電が続く中、予備の光源がない。",
+        title: "お風呂に入れない",
+        description: "災害後、しばらくはお風呂に入れなかった。",
+        requiredItems: ["汗拭きシート","ボディソープ"],
+        consequence: "体を清潔に保つことができる。"
+    },
+    {
+        title: "携帯を充電できない",
+        description: "連絡手段や情報源は携帯しかなかったのに、充電できなくて困った。",
+        requiredItems: ["モバイルバッテリー"],
+        consequence: "携帯を充電することができる。"
+    },
+    {
+        title: "コンタクトレンズ問題",
+        description: "眼鏡が無く、コンタクトの予備も無かった為、コンタクトを変える事が出来ずに目を痛めた。",
+        requiredItems: ["コンタクトレンズセット","眼鏡"],
+        consequence: "携帯を充電することができる。"
+    },
+    {
+        title: "キャッシュレスを利用できない",
+        description: "停電すると、電子マネーやクレジットは使えなかった。",
+        requiredItems: ["現金・小銭"],
+        consequence: "停電しても、支払いができる。"
+    },
+    {
+        title: "停電（火が危ない）",
+        description: "停電により部屋が真っ暗に。激しい余震でろうそくは危なくて使えなかった。",
+        requiredItems: ["ランタン","懐中電灯"],
+        consequence: "火を使わずに、明かりをつけられる。"
+    },
+    {
+        title: "生活水不足（歯磨き）",
+        description: "生活用水不足により、歯磨きが出来なかった。",
+        requiredItems: ["液体歯磨き"],
+        consequence: "虫歯や口臭予防だけではなく心のリフレッシュにもなる。"
+    },
+    {
+        title: "生活水不足（洗い物）",
+        description: "生活用水不足により、十分に洗い物が出来なかった。",
+        requiredItems: ["ラップ"],
+        consequence: "お皿にラップを巻いて、少しでも洗い物を減らせる。"
+    },
+    {
+        title: "停電（不安）",
+        description: "停電で真っ暗な中いるのはすごく辛かった。",
         requiredItems: ["ろうそく"],
-        image: "",
-        consequence: "暗闇で行動が制限される可能性があります。"
-    }
+        consequence: "電気が止まっても光を出してくれるものがあれば不安を和らげられる。"
+    },
+    {
+        title: "着替えられない",
+        description: "災害から三日間着替えられず、衛生的に気持ちが悪かった。",
+        requiredItems: ["衣類・下着"],
+        consequence: "衛生的に清潔を保てる。"
+    },
+    {
+        title: "暗所での作業",
+        description: "暗い場所で，作業をするのに手が空いていなかった。",
+        requiredItems: ["ヘッドライト"],
+        consequence: "暗所でも両手を使って作業できる。"
+    },
+    {
+        title: "精神的に辛い",
+        description: "避難所で暇を持て余して、精神的にしんどかった。",
+        requiredItems: ["トランプ"],
+        consequence: "電気を使わずに手を動かして心を落ち着かせられる。"
+    },
+    {
+        title: "薬の副作用",
+        description: "主治医以外の医師に診てもらい、症状に合わせて薬を出してもらったが、副作用で手が震えたりしてしばらく辛かった。",
+        requiredItems: ["処方箋の控え","常備薬"],
+        consequence: "自分に合った薬を飲める。"
+    },
+    {
+        title: "睡眠環境（床の硬さ）",
+        description: "床が硬くて寝られなかった。",
+        requiredItems: ["エアマット","エア枕","寝袋"],
+        consequence: "床を気にせず，寝られる。"
+    },
+    {
+        title: "トイレットペーパー不足",
+        description: "トイレにトイレットペーパーがなくて困った。お店もなかなか入荷されず、買うことが出来なかった。",
+        requiredItems: ["トイレットペーパー"],
+        consequence: "床を気にせず，寝られる。"
+    },
+    {
+        title: "外の情報",
+        description: "携帯がつながらず、外の情報を知ることが出来なかった。",
+        requiredItems: ["携帯ラジオ"],
+        consequence: "情報収集ができ、たまに流れてくる音楽に癒されることもある。"
+    },
+    {
+        title: "生活水不足（衛生）",
+        description: "生活水不足により、手や食器類を毎回洗えない。",
+        requiredItems: ["ウェットティッシュ","ティッシュペーパー"],
+        consequence: "水を使わずに、拭くことができる。"
+    },
+    {
+        title: "寒波到来（火）",
+        description: "最低気温0度近くが4日続き、日中の最高気温でも10度で、用意した物だけでは暖がとれなかった。",
+        requiredItems: ["ライター","マッチ"],
+        consequence: "焚火をして暖が取れる。明かり、調理にも使える。"
+    },
 ];
 
 // 女性特有のシナリオ
@@ -87,7 +173,6 @@ const femaleSpecificScenarios = [
         title: "生理用品の不足",
         description: "避難所生活が長引き、生理用品が不足している状況です。",
         requiredItems: ["生理用品"],
-        image: "",
         consequence: "生理用品が不足することで、心身ともに大きなストレスを感じる可能性があります。"
     }
 ];
@@ -108,7 +193,7 @@ firebase.initializeApp(firebaseConfig);
 let displayedScenarios = [];
 
 // シミュレーション回数を追跡する変数
-let simulationCount = 0;
+//let simulationCount = 0;
 
 // 現在表示しているシナリオのインデックス
 let currentIndex = 0;
@@ -203,15 +288,15 @@ function displayScenarioByIndex(index) {
     
     // シナリオの内容をHTML要素に反映
     document.getElementById('scenarioTitle').textContent = scenario.title;
+    document.getElementById('scenarioDescription').textContent = scenario.description;
     document.querySelector('.required-items').innerHTML = `
         <h3>必要な非常持ち出し品:</h3>
         <p>${scenario.requiredItems.join(', ')}${scenario.minQuantity ? ` (${scenario.minQuantity}個以上)` : ''}</p>
     `;
     document.querySelector('.consequence').innerHTML = `
-        <h3>対応できない場合の結果:</h3>
+        <h3>対応できた場合:</h3>
         <p>${scenario.consequence}</p>
     `;
-    document.getElementById('scenarioImage').src = scenario.image;
 
     markScenarioAsViewed(scenario);
 
@@ -234,10 +319,15 @@ function displayScenarioByIndex(index) {
         saveFeedbackToLocalStorage(scenario, isChecked); // LocalStorageに保存
     };
 
-    // シミュレーションが10回目の場合に「戻る」ボタンを表示
-    if (simulationCount === 10) {
+    // 現在のインデックスが最後のシナリオの場合にbackButtonを表示
+    if (index === fixedScenarioOrder.length - 1) {
         document.getElementById('backButton').style.display = 'block';
     }
+
+    /* シミュレーションが10回目の場合に「戻る」ボタンを表示
+    if (simulationCount === 10) {
+        document.getElementById('backButton').style.display = 'block';
+    }*/
 }
 
 function markScenarioAsViewed(scenario) {
@@ -258,7 +348,7 @@ function initializeSimulation(selectedItems) {
         .then(appropriateScenarios => {
             const unhandledScenarios = getUnhandledScenarios(selectedItems, appropriateScenarios);
             fixedScenarioOrder = shuffleScenarios(unhandledScenarios);
-            simulationCount = 0;
+            //simulationCount = 0;
             currentIndex = 0;
 
             if (fixedScenarioOrder.length > 0) {
@@ -298,7 +388,7 @@ document.getElementById('prevButton').addEventListener('click', () => {
 document.getElementById('nextButton').addEventListener('click', () => {
     if (currentIndex < fixedScenarioOrder.length - 1) {
         currentIndex++; // インデックスを進める
-        simulationCount++; // シミュレーション回数を更新
+        //simulationCount++; // シミュレーション回数を更新
         displayScenarioByIndex(currentIndex); // 次のシナリオを表示
     }
 });

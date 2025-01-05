@@ -32,14 +32,6 @@ body {
     margin-bottom: 20px;
 }
 
-.scenario-image {
-    width: 100%;
-    height: 300px;
-    object-fit: cover;
-    border-radius: 8px;
-    margin-bottom: 15px;
-}
-
 .scenario-content {
     background-color: white;
     padding: 20px;
@@ -110,6 +102,8 @@ button {
 .disabled {
     background-color: #ccc;
     cursor: not-allowed;
+    visibility: hidden; /* ボタンを非表示にする */
+    opacity: 0; /* 完全に透明にする */
 }
 
 .scenario-content .feedback-checkbox {
