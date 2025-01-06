@@ -1,7 +1,7 @@
 // シナリオデータ
 const scenarios = [
     {
-        title: "寒波到来①",
+        title: "寒波到来（火災・電気容量の恐れ）",
         description: "多くの避難所では、火災の恐れや電気容量の問題から暖房器具などが使えなかった。",
         requiredItems: ["使い捨てカイロ","毛布","アルミブランケット"],
         consequence: "電気を使わずに寒さ対策ができる。"
@@ -29,7 +29,7 @@ const scenarios = [
         description: "避難所での水の配給が少ない。",
         requiredItems: ["飲料水(500ml)"],
         minQuantity: 4,
-        consequence: "水不足による健康被害のリスクがあります。"
+        consequence: "水不足による健康被害のリスクが低減する。"
     },
     {
         title: "不潔な髪の毛",
@@ -79,7 +79,7 @@ const scenarios = [
         title: "コンタクトレンズ問題",
         description: "眼鏡が無く、コンタクトの予備も無かった為、コンタクトを変える事が出来ずに目を痛めた。",
         requiredItems: ["コンタクトレンズセット","眼鏡"],
-        consequence: "携帯を充電することができる。"
+        consequence: "コンタクトを変えずに目が痛くなることが無くなる。"
     },
     {
         title: "キャッシュレスを利用できない",
@@ -145,12 +145,12 @@ const scenarios = [
         title: "トイレットペーパー不足",
         description: "トイレにトイレットペーパーがなくて困った。お店もなかなか入荷されず、買うことが出来なかった。",
         requiredItems: ["トイレットペーパー"],
-        consequence: "床を気にせず，寝られる。"
+        consequence: "トイレットペーパー不足に対応できる。"
     },
     {
         title: "外の情報",
         description: "携帯がつながらず、外の情報を知ることが出来なかった。",
-        requiredItems: ["携帯ラジオ"],
+        requiredItems: ["携帯ラジオ","防災ラジオ"],
         consequence: "情報収集ができ、たまに流れてくる音楽に癒されることもある。"
     },
     {
@@ -173,7 +173,7 @@ const femaleSpecificScenarios = [
         title: "生理用品の不足",
         description: "避難所生活が長引き、生理用品が不足している状況です。",
         requiredItems: ["生理用品"],
-        consequence: "生理用品が不足することで、心身ともに大きなストレスを感じる可能性があります。"
+        consequence: "生理用品不足に対応できる。下着が汚れるのを防ぐこともできる。"
     }
 ];
 
