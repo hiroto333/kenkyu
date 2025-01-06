@@ -10,7 +10,7 @@ const scenarios = [
         title: "プライバシー問題",
         description: "避難所において、プライバシーが確保されず、避難者に大きなストレスとなった。",
         requiredItems: ["レジャーシート"],
-        consequence: "仕切りを作れて，プライバシーがある程度確保できる。"
+        consequence: "仕切りを作れて、プライバシーを確保できる。"
     },
     {
         title: "睡眠環境（夜間の明るさ）",
@@ -20,16 +20,9 @@ const scenarios = [
     },
     {
         title: "睡眠環境（騒音）",
-        description: "避難所で他の避難者の騒音で眠れなかった。",
+        description: "避難所で他の避難者の騒音により、眠れなかった。",
         requiredItems: ["耳栓"],
         consequence: "騒音を気にせず、眠れる。"
-    },
-    {
-        title: "水不足",
-        description: "避難所での水の配給が少ない。",
-        requiredItems: ["飲料水(500ml)"],
-        minQuantity: 4,
-        consequence: "水不足による健康被害のリスクが低減する。"
     },
     {
         title: "不潔な髪の毛",
@@ -39,13 +32,13 @@ const scenarios = [
     },
     {
         title: "感染症蔓延",
-        description: "衛生環境が悪化し，コロナやインフルエンザなどの感染症が蔓延した。",
+        description: "衛生環境が悪化し、コロナやインフルエンザなどの感染症が蔓延した。",
         requiredItems: ["石鹸","マスク(3枚入り)","アルコール消毒液"],
         consequence: "感染症のリスクが低減する。"
     },
     {
-        title: "トイレに行けない",
-        description: "仮設トイレ到着が遅れ，トイレが出来なかった。",
+        title: "トイレできない",
+        description: "仮設トイレ到着が遅れ、トイレが出来なかった。",
         requiredItems: ["簡易トイレ"],
         minQuantity: 6,
         consequence: "仮設トイレが無くても、トイレができる。"
@@ -59,14 +52,14 @@ const scenarios = [
     {
         title: "食料不足",
         description: "全国各地から届けられた食料が避難所まで行き届かなかった。",
-        requiredItems: ["非常食"],
+        requiredItems: ["非常食(1食)"],
         minQuantity: 6,
         consequence: "避難所からの支援が無くても、食料を食べられる。"
     },
     {
         title: "お風呂に入れない",
         description: "災害後、しばらくはお風呂に入れなかった。",
-        requiredItems: ["汗拭きシート","ボディソープ"],
+        requiredItems: ["汗拭きシート","ボディソープ","ウェットティッシュ"],
         consequence: "体を清潔に保つことができる。"
     },
     {
@@ -94,13 +87,13 @@ const scenarios = [
         consequence: "火を使わずに、明かりをつけられる。"
     },
     {
-        title: "生活水不足（歯磨き）",
+        title: "生活用水不足（歯磨き）",
         description: "生活用水不足により、歯磨きが出来なかった。",
-        requiredItems: ["液体歯磨き"],
+        requiredItems: ["洗口液"],
         consequence: "虫歯や口臭予防だけではなく心のリフレッシュにもなる。"
     },
     {
-        title: "生活水不足（洗い物）",
+        title: "生活用水不足（洗い物）",
         description: "生活用水不足により、十分に洗い物が出来なかった。",
         requiredItems: ["ラップ"],
         consequence: "お皿にラップを巻いて、少しでも洗い物を減らせる。"
@@ -109,7 +102,7 @@ const scenarios = [
         title: "停電（不安）",
         description: "停電で真っ暗な中いるのはすごく辛かった。",
         requiredItems: ["ろうそく"],
-        consequence: "電気が止まっても光を出してくれるものがあれば不安を和らげられる。"
+        consequence: "電気が止まっても、光を出してくれるものがあれば不安を和らげられる。"
     },
     {
         title: "着替えられない",
@@ -119,7 +112,7 @@ const scenarios = [
     },
     {
         title: "暗所での作業",
-        description: "暗い場所で，作業をするのに手が空いていなかった。",
+        description: "暗い場所で、作業をするのに手が空いていなかった。",
         requiredItems: ["ヘッドライト"],
         consequence: "暗所でも両手を使って作業できる。"
     },
@@ -127,7 +120,7 @@ const scenarios = [
         title: "精神的に辛い",
         description: "避難所で暇を持て余して、精神的にしんどかった。",
         requiredItems: ["トランプ"],
-        consequence: "電気を使わずに手を動かして心を落ち着かせられる。"
+        consequence: "電気を使わずに、手を動かして心を落ち着かせられる。"
     },
     {
         title: "薬の副作用",
@@ -148,8 +141,8 @@ const scenarios = [
         consequence: "トイレットペーパー不足に対応できる。"
     },
     {
-        title: "外の情報",
-        description: "携帯がつながらず、外の情報を知ることが出来なかった。",
+        title: "情報収集問題",
+        description: "災害時の混乱によってスマホが使えなかった。フェイクニュースやデマ情報など、情報過多になり正確な情報のみを入手できなかった。",
         requiredItems: ["携帯ラジオ","防災ラジオ"],
         consequence: "情報収集ができ、たまに流れてくる音楽に癒されることもある。"
     },
@@ -160,19 +153,27 @@ const scenarios = [
         consequence: "水を使わずに、拭くことができる。"
     },
     {
-        title: "寒波到来（火）",
+        title: "防寒具不足",
         description: "最低気温0度近くが4日続き、日中の最高気温でも10度で、用意した物だけでは暖がとれなかった。",
         requiredItems: ["ライター","マッチ"],
         consequence: "焚火をして暖が取れる。明かり、調理にも使える。"
+    },
+    {
+        title: "飲料水不足",
+        description: "避難所での飲料水の配給が少ない。",
+        requiredItems: ["飲料水(500ml)"],
+        minQuantity: 4,
+        consequence: "水不足による健康被害のリスクが低減する。"
     },
 ];
 
 // 女性特有のシナリオ
 const femaleSpecificScenarios = [
     {
-        title: "生理用品の不足",
-        description: "避難所生活が長引き、生理用品が不足している状況です。",
+        title: "生理用品不足",
+        description: "避難所で支給されたものでは足りなかった。周りに遠慮してしまい追加でもらいにくい状況もあった。",
         requiredItems: ["生理用品"],
+        minQuantity: 15,
         consequence: "生理用品不足に対応できる。下着が汚れるのを防ぐこともできる。"
     }
 ];
