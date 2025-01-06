@@ -147,8 +147,8 @@ const scenarios = [
         consequence: "情報収集ができ、たまに流れてくる音楽に癒されることもある。"
     },
     {
-        title: "生活水不足（衛生）",
-        description: "生活水不足により、手や食器類を毎回洗えない。",
+        title: "生活用水不足（衛生）",
+        description: "生活用水不足により、手や食器類を毎回洗えなかった。",
         requiredItems: ["ウェットティッシュ","ティッシュペーパー"],
         consequence: "水を使わずに、拭くことができる。"
     },
@@ -165,6 +165,24 @@ const scenarios = [
         minQuantity: 4,
         consequence: "水不足による健康被害のリスクが低減する。"
     },
+    {
+        title: "乾電池不足",
+        description: "ラジオに使う電池が足りなかった。",
+        requiredItems: ["乾電池(3本入り）"],
+        consequence: "乾電池不足に対応できる。"
+    },
+    {
+        title: "手が荒れる",
+        description: "浸水した家の片付けをしていると、手が荒れてしまった。",
+        requiredItems: ["ハンドクリーム"],
+        consequence: "手を保湿することができる。"
+    },
+    {
+        title: "肌が乾燥する",
+        description: "避難生活でスキンケアがまったくできない状況で過ごした。肌が乾燥して、ヒリヒリ痛くなった。",
+        requiredItems: ["スキンケア用品"],
+        consequence: "肌を保湿し，乾燥を防ぐことができる。"
+    }
 ];
 
 // 女性特有のシナリオ
@@ -175,6 +193,12 @@ const femaleSpecificScenarios = [
         requiredItems: ["生理用品"],
         minQuantity: 15,
         consequence: "生理用品不足に対応できる。下着が汚れるのを防ぐこともできる。"
+    },
+    {
+        title: "メイクを落とせない",
+        description: "メイクしたまま、数日過ごした。生活用水不足で、洗顔できなかった。",
+        requiredItems: ["メイク落としシート"],
+        consequence: "メイクを落とすことができる。"
     }
 ];
 

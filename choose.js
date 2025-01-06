@@ -73,8 +73,9 @@ const items = [
     { name: "寝袋", weight: 1400, volume: 12000, explanation: "" },
     { name: "くし", weight: 14, volume: 7, explanation: "整髪用。" },
     { name: "鏡", weight: 90, volume: 149, explanation: "" },
-    { name: "ヘアゴム", weight: 2, volume: 5, explanation: "" },
-    { name: "スマホ充電器", weight: 60, volume: 50, explanation: "スマホを充電できるケーブルとACアダプター。" }
+    { name: "ヘアゴム", weight: 1, volume: 3, explanation: "" },
+    { name: "スマホ充電器", weight: 60, volume: 50, explanation: "スマホを充電できるケーブルとACアダプター。" },
+    { name: "スキンケア用品", weight: 70, volume: 378, explanation: "化粧水、乳液、クリーム。携帯用。" }
 ];
 
 // Firebase設定
@@ -392,9 +393,9 @@ function customizeItemsByGender(gender) {
         const femaleItems = [
             {
                 name: "化粧品セット",
-                weight: 200,
-                volume: 400,
-                explanation: ""
+                weight: 400,
+                volume: 1235,
+                explanation: "化粧下地、ファンデーション、アイライナー、アイシャドウ、マスカラ、ビューラー、パフ、アイブロウ、パウダー。"
             },
             {
                 name: "メイク落としシート",
@@ -404,9 +405,9 @@ function customizeItemsByGender(gender) {
             },
             {
                 name: "生理用品",
-                weight: 20,
-                volume: 50,
-                explanation: "生理用ナプキン。1枚分。"
+                weight: 5,
+                volume: 102,
+                explanation: "生理用ナプキン20cm。1枚分。"
             },
             {
                 name: "サニタリーショーツ",
@@ -416,8 +417,8 @@ function customizeItemsByGender(gender) {
             },
             {
                 name: "おりものシート",
-                weight: 15,
-                volume: 30,
+                weight: 1,
+                volume: 23,
                 explanation: "1枚分。"
             }
         ];
@@ -426,7 +427,7 @@ function customizeItemsByGender(gender) {
         items.push(...femaleItems);
     } else {
         // 男性の場合、特定のアイテムを除外
-        const excludeItems = ["生理用品", "化粧品セット", "メイク落としシート","サニタリーショーツ"];
+        const excludeItems = ["化粧品セット", "メイク落としシート","生理用品", "サニタリーショーツ","おりものシート"];
         for (let i = items.length - 1; i >= 0; i--) {
             if (excludeItems.includes(items[i].name)) {
                 items.splice(i, 1);
