@@ -70,6 +70,12 @@ body {
     align-items: center;
     margin-top: 20px;
 }
+/* 非表示時にも同じスペースを確保 */
+.nav-button[style*="display: none"] {
+    visibility: hidden;
+    opacity: 0;
+    display: block !important;
+}
 
 button {
     padding: 10px 20px;

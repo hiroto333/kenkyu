@@ -325,12 +325,19 @@ function displayScenarioByIndex(index) {
 
     markScenarioAsViewed(scenario);
 
-    // ナビゲーションボタンの有効/無効を更新
-    document.getElementById('prevButton').disabled = index === 0; // 最初のシナリオで「前へ」を無効化
-    document.getElementById('nextButton').disabled = index === fixedScenarioOrder.length - 1; // 最後のシナリオで「次へ」を無効化
+    // ナビゲーションボタンの有効/無効と表示/非表示を更新
+    const prevButton = document.getElementById('prevButton');
+    const nextButton = document.getElementById('nextButton');
+
+    prevButton.disabled = index === 0;
+    nextButton.disabled = index === fixedScenarioOrder.length - 1;
 
     const feedbackCheckbox = document.getElementById('scenarioFeedbackCheck');
     feedbackCheckbox.checked = false;
+
+    // display: noneで要素を完全に非表示
+    prevButton.style.display = index === 0 ? 'none' : 'block';
+    nextButton.style.display = index === fixedScenarioOrder.length - 1 ? 'none' : 'block';
 
     // LocalStorageから状態を復元
     const feedbackState = restoreFeedbackFromLocalStorage();
@@ -404,7 +411,7 @@ document.getElementById('backButton').addEventListener('click', () => {
 // エンドボタンのイベント
 document.getElementById('endButton').addEventListener('click', () => {
     saveScenarioFeedback()
-    alert(`実験終了！ご協力ありがとうございました！`);
+    alert(`実験終了です！ご協力ありがとうございました！`);
 });
 
 // 「前へ」ボタンのクリックイベント
