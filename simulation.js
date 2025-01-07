@@ -88,7 +88,7 @@ const scenarios = [
     },
     {
         title: "生活用水不足（歯磨き）",
-        description: "生活用水不足により、歯磨きが出来なかった。",
+        description: "生活用水不足により、歯ブラシセットがあっても、歯磨きが出来なかった。",
         requiredItems: ["洗口液"],
         consequence: "虫歯や口臭予防だけではなく心のリフレッシュにもなる。"
     },
@@ -101,7 +101,7 @@ const scenarios = [
     {
         title: "停電（不安）",
         description: "停電で真っ暗な中いるのはすごく辛かった。",
-        requiredItems: ["ろうそく"],
+        requiredItems: ["ろうそく","ランタン","懐中電灯"],
         consequence: "電気が止まっても、光を出してくれるものがあれば不安を和らげられる。"
     },
     {
@@ -112,7 +112,7 @@ const scenarios = [
     },
     {
         title: "暗所での作業",
-        description: "暗い場所で、作業をするのに手が空いていなかった。",
+        description: "暗い場所で、作業（調理、トイレ、着替えなど）をするのに手が空いていなかった。",
         requiredItems: ["ヘッドライト"],
         consequence: "暗所でも両手を使って作業できる。"
     },
@@ -142,9 +142,9 @@ const scenarios = [
     },
     {
         title: "情報収集問題",
-        description: "災害時の混乱によってスマホが使えなかった。フェイクニュースやデマ情報など、情報過多になり正確な情報のみを入手できなかった。",
+        description: "災害時の混乱によってスマホが使えなかった。スマホがあっても、フェイクニュースやデマ情報など、情報過多になり正確な情報のみを入手できなかった。",
         requiredItems: ["携帯ラジオ","防災ラジオ"],
-        consequence: "情報収集ができ、たまに流れてくる音楽に癒されることもある。"
+        consequence: "正確な情報を収集でき、たまに流れてくる音楽に癒されることもある。"
     },
     {
         title: "生活用水不足（衛生）",
@@ -199,6 +199,12 @@ const femaleSpecificScenarios = [
         description: "メイクしたまま、数日過ごした。生活用水不足で、洗顔できなかった。",
         requiredItems: ["メイク落としシート"],
         consequence: "メイクを落とすことができる。"
+    },
+    {
+        title: "化粧できない",
+        description: "避難所で化粧をせず、数日過ごした。他人がいるので、化粧をしたかった。",
+        requiredItems: ["化粧品セット"],
+        consequence: "化粧することができる。"
     }
 ];
 
