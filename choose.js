@@ -279,6 +279,7 @@ function completeSelection() {
     feedbackContainer.style.display = 'block';
     
     document.querySelector('.checklist').style.display = 'none';
+    document.querySelector('.selected-items').style.display = 'none';
 }
 
 /**

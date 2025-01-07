@@ -10,11 +10,19 @@ body {
     justify-content: space-between;
     gap: 20px;
 }
-.checklist, .selected-items {
+.checklist, .selected-items,.feedbackStart {
     background-color: white;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+.feedbackStart {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 .checklist {
     width: 60%;
@@ -139,12 +147,12 @@ button {
     background-color: #cc0000; /* ホバー時の赤 */
 }
 
-.increase-button, .complete-button {
+.increase-button, .complete-button,.simulate-button {
     background-color: #4CAF50;
     color: white;
 }
 
-.increase-button:hover, .complete-button:hover {
+.increase-button:hover, .complete-button:hover,.simulate-button:hover {
     background-color: #45a049;
 }
 

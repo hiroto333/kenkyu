@@ -64,7 +64,7 @@ body {
     border-radius: 6px;
 }
 
-.navigation {
+.navigation,.navigation2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -90,12 +90,19 @@ button {
 }
 
 .back-button {
-    margin-top: 20px;
-    background-color: #4caf50;
+    background-color: red; 
     color: white;
 }
 
 .back-button:hover {
+    background-color: #cc0000;
+}
+.end-button {
+    background-color: #4caf50;
+    color: white;
+}
+
+.end-button:hover {
     background-color: #388e3c;
 }
 

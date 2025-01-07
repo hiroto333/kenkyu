@@ -43,13 +43,14 @@
             </div>
             <button class="reset-button" onclick="resetSelection()">リセット</button>
             <button class="complete-button" onclick="completeSelection()">作成完了</button>
-            <div id="feedback" style="display: none;">
-                <h2>シミュレーション結果</h2>
-                <div id="feedbackContent"></div>
-                <button class="simulate-button" onclick="startSimulation()">シミュレーションを開始</button>
-            </div>
             <ul id="selectedItems" class="selected-list"></ul>
         </div>
+    </div>
+    <div id="feedback" class="feedbackStart" style="display: none;">
+        <h2>非常持ち出し袋を作成完了</h2>
+        <p>自分の作成した非常持ち出し袋では対応できない状況を見てみよう！</p>
+        <div id="feedbackContent"></div>
+        <button class="simulate-button" onclick="startSimulation()">対応できない状況の提示を開始</button>
     </div>
 
     <script src="./choose.js" type="application/javascript"></script>

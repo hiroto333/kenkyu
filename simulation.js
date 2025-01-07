@@ -3,7 +3,7 @@ const scenarios = [
     {
         title: "寒波到来（火災・電気容量の恐れ）",
         description: "多くの避難所では、火災の恐れや電気容量の問題から暖房器具などが使えなかった。",
-        requiredItems: ["使い捨てカイロ","毛布","アルミブランケット"],
+        requiredItems: ["使い捨てカイロ","毛布","アルミ製保温シート"],
         consequence: "電気を使わずに寒さ対策ができる。"
     },
     {
@@ -132,7 +132,7 @@ const scenarios = [
         title: "睡眠環境（床の硬さ）",
         description: "床が硬くて寝られなかった。",
         requiredItems: ["エアマット","エア枕","寝袋"],
-        consequence: "床を気にせず，寝られる。"
+        consequence: "床を気にせず、寝られる。"
     },
     {
         title: "トイレットペーパー不足",
@@ -347,6 +347,7 @@ function displayScenarioByIndex(index) {
     // 現在のインデックスが最後のシナリオの場合にbackButtonを表示
     if (index === fixedScenarioOrder.length - 1) {
         document.getElementById('backButton').style.display = 'block';
+        document.getElementById('endButton').style.display = 'block';
     }
 
     /* シミュレーションが10回目の場合に「戻る」ボタンを表示
@@ -399,6 +400,11 @@ document.getElementById('backButton').addEventListener('click', () => {
             // オプション：エラー時の処理（ユーザーへの通知など）
             window.location.href = 'choose.html';
         });
+});
+// エンドボタンのイベント
+document.getElementById('endButton').addEventListener('click', () => {
+    saveScenarioFeedback()
+    alert(`実験終了！ご協力ありがとうございました！`);
 });
 
 // 「前へ」ボタンのクリックイベント
